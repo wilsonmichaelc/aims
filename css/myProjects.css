@@ -1,0 +1,118 @@
+input:disabled
+{
+	background-color: rgba(174,174,174,0.2);
+}
+.project-info
+{
+	
+}
+	
+.servicesSelected
+{
+	width: 770px;
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	margin-bottom: 10px;
+	margin-left: 2px;
+}
+
+.project-container
+{
+	max-width: 800px; 
+	#height: 335px;
+	padding: 10px; 
+	border-bottom-left-radius: 0.4em; 
+	border-bottom-right-radius: 0.4em; 
+	border-top-right-radius: 0.4em; 
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	overflow: auto;
+}
+
+.project-column-container
+{
+	width: 770px;
+	#overflow: auto;
+}
+
+.project-column-2
+{
+	width: 380px;
+	float: left;
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	#overflow: auto;
+}
+	span.input input
+	{
+		height: 31px;
+	}
+	
+	.project-column-2 span.label
+	{
+		width: 200px;
+		float: left;
+		#border: 1px solid red;
+	}
+	.project-column-2 span.input
+	{
+		width: 160px;
+		height: 31px;
+		float: right;
+		#border: 1px solid blue;
+	}
+	
+	.project-column-2.left
+	{
+		float: left;
+	}
+	.project-column-2.right
+	{
+		float: right;
+	}
+
+.project-column-1
+{
+	width: 770px;
+	#border: 1px solid blue;
+	overflow: auto;
+
+}
+
+#project-abstract textarea
+{
+	width: 770px;
+	height: 55px;
+	padding: 5px;
+	border-radius: 0.4em;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	border: solid 1px #ddd;
+	overflow: auto;
+}
+
+.project-info-tab, .project-bookings-tab, .project-services-tab{
+	cursor: pointer; 
+	color: #c94663; 
+	font-weight: bold; 
+	padding-left: 10px; 
+	padding-right: 10px; 
+	display: inline; 
+	border-top-left-radius: 0.4em; 
+	border-top-right-radius: 0.4em; 
+	border: 1.5px solid rgba(0,0,0,0.25);
+}
+
+.ProjectResponse{
+	padding-left: 10px; 
+	padding-right: 10px;
+	display: inline;
+}

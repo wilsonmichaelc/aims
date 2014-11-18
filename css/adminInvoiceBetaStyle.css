@@ -1,0 +1,123 @@
+div.projectInfo,
+div.bookingInfo,
+div.serviceInfo,
+div.trainingInfo
+{
+	width: 100%;
+	#height: 25px;
+	margin-left: 25px;
+	
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+}
+
+div.bookingInfo span,
+div.serviceInfo span,
+div.trainingInfo span
+{
+	display: inline-block;
+	padding-right: 20px;
+}
+
+div.bookingHeader,
+div.serviceHeader,
+div.trainingHeader{
+	display: block;
+	margin-left: 25px;
+	padding-bottom: 30px !important;
+	
+	color: #565656 !important;
+	font-size: 1em !important;
+	font-weight: bold !important;
+	
+	width: 100%;
+	height: 25px;
+	
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+}
+
+/* Style for booking entries */
+
+span#bid{
+	display: inline-block;
+	width: 40px;
+}
+span#inst{
+	display: inline-block;
+	width: 200px;
+}
+span#from{
+	display: inline-block;
+	width: 200px;
+}
+span#to{
+	display: inline-block;
+	width: 200px;
+}
+span#hrs{
+	display: inline-block;
+	width: 50px;
+}
+
+/* Style for service request entries*/
+
+span#check{
+	display: inline-block;
+	width: 30px;
+}
+span#sid{
+	display: inline-block;
+	width: 35px;
+}
+span#rid{
+	display: inline-block;
+	width: 80px;
+}
+span#name{
+	display: inline-block;
+	width: 500px;
+}
+span#samples{
+	display: inline-block;
+	width: 80px;
+	text-align: center;
+}
+span#replicates{
+	display: inline-block;
+	width: 80px;
+	text-align: center;
+}
+span#prep{
+	display: inline-block;	
+	width: 80px;
+	text-align: center;
+}
+
+/* Style for training entries */
+
+span#tid{
+	display: inline-block;
+	width: 40px;
+}
+
+form input[name="createInvoice"]{
+	width: 150px;
+	margin-top: 30px;
+	margin-left: 40px;
+}
+
+span.fromLabel,
+span.toLabel
+{
+	display: inline-block;
+	width: 45px;	
+}

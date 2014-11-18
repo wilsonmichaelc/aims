@@ -1,0 +1,233 @@
+.theBasics, .theTrainingModules, .theTrainingBookings, .theAccess, .theConferenceAccess, .theProjects, .theBookings, .theServiceRequests, .serviceContainer{
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	min-width: 600px;
+	max-width: 1000px;
+	margin-bottom: 10px;
+}
+
+div.content .request{
+	display: none;
+	padding-left: 40px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	#border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+span.requestToggle{
+	cursor: pointer;
+	padding-left: 20px;
+	font-weight: bold;
+}
+
+span.response{
+	display: inline;
+	float: right;
+	width: 400px;
+	text-align: right;
+	margin-right: 20px;
+}
+
+.ffs_left, .ffs_right
+{
+	width: 450px;
+	padding: 5px;
+}
+
+.ffs_left input,
+.ffs_right input
+{
+	width: 290px;
+}
+
+.ffs_left span,
+.ffs_right span
+{
+	display: inline-block;
+	width: 150px;
+}
+
+.ffs_left
+{
+	float: left;
+}
+
+.ffs_right
+{
+	float: right;
+}
+
+.ffs_Selected .labels div{
+	width: 200px;
+	display: inline-block;
+}
+
+.ffs_Selected .inputs div{
+	width: 200px;
+	display: inline-block;
+}
+
+.ffs_Selected .inputs #delete{
+	width: 50px !important;
+	display: inline-block;
+}
+
+.ffs_Selected .inputs input,
+.ffs_Selected .inputs select
+{
+	width: 150px;
+}
+
+.ffs_Selected .inputs span.ServiceResponse{
+	width: 70px;
+}
+
+.serviceContainer{
+	padding: 10px;
+	
+}
+
+input[type="button"]{
+	border-radius: 0.4em;
+	-webkit-appearance: none;
+	border: solid 1px #ddd;
+	padding: 0.5em;
+	width: 80px;
+	height: 36px;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	color: #565656;
+}
+
+input[type="button"]:hover
+{
+	background-color: #d95673;
+}
+
+input[type="button"]:active
+{
+	background-color: #b93653;
+}
+
+input.archiveBookingYes,
+input.archiveBookingNo
+{
+	display: none;
+	width: 50px;
+}
+
+input.unArchiveBookingYes,
+input.unArchiveBookingNo
+{
+	display: none;
+	width: 50px;
+}
+
+#showHideArchive
+{
+	border-radius: 0.4em;
+	-webkit-appearance: none;
+	border: solid 1px #ddd;
+	padding: 0.5em;
+	width: 30px;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: bold;
+	color: #565656;
+	
+}
+
+div.archived{
+	display: none;
+}
+
+div.archived.show{
+	display: block;
+}
+
+span.toggleAccess:hover,
+span.toggleConferenceAccess:hover,
+span.toggleTrainingModules:hover,
+span.toggleTrainingBookings:hover,
+span.toggleProjects:hover,
+span.toggleBookings:hover
+{
+	cursor: pointer;
+}
+
+span.title
+{
+	font-weight: bold;
+}
+#user_projects input[name="primaryInvestigator"]
+{
+	width: 150px;
+}
+#user_projects input[name="addressOne"]
+{
+	width: 150px;
+}
+#user_projects input[name="addressTwo"]
+{
+	width: 150px;
+}
+#user_projects input[name="city"]
+{
+	width: 100px;
+}
+#user_projects input[name="state"]
+{
+	width: 45px;
+}
+#user_projects input[name="zip"]
+{
+	width: 55px;
+}
+#user_projects input[name="phone"]
+{
+	width: 100px;
+}
+#user_projects input[name="fax"]
+{
+	width: 100px;
+}
+#user_projects input[type="submit"],
+#user_bookings input[type="submit"]
+{
+	width: 80px;
+}
+
+#user_bookings input[name="dateFrom"],
+#user_trainingBookings input[name="dateFrom"]
+{
+	width: 145px;
+}
+#user_bookings input[name="dateTo"],
+#user_trainingBookings input[name="dateTo"]
+{
+	width: 145px;
+}
+#user_bookings input[name="timeFrom"],
+#user_trainingBookings input[name="timeFrom"]
+{
+	width: 110px;
+}
+#user_bookings input[name="timeTo"],
+#user_trainingBookings input[name="timeTo"]
+{
+	width: 110px;
+}
+
+div.label{
+	display: inline-block;
+	width: 70px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+div.input{
+	display: inline;
+}

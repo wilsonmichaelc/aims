@@ -1,0 +1,155 @@
+div.booking,
+div.service,
+div.training,
+div.header
+{
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	width: 1200px;
+	min-height: 32px;
+	
+}
+
+.booking div{
+	height: 30px;
+}
+
+#bookingSpinner,
+#serviceSpinner,
+#trainingSpinner{
+	margin-left: 40px;
+	display: none;
+}
+
+div.header, div.service.header
+{
+	font-weight: bold;
+}
+
+div.booking, div.service, div.training, div.header
+{
+	#overflow: auto;
+}
+div.service{
+	overflow: auto;
+}
+
+div.bookingId, div.serviceId, div.trainingId
+{
+	#border: 1px solid blue;
+	width: 40px;
+	float: left;
+}
+
+div.user
+{
+	#border: 1px solid red;
+	width: 180px;
+	float: left;
+}
+
+div.accountType
+{
+	#border: 1px solid cyan;
+	width: 85px;
+	float: left;
+}
+
+div.project
+{
+	#border: 1px solid green;
+	width: 180px;
+	text-overflow: clip !important;
+	overflow: hidden !important;
+	float: left;
+}
+
+
+div.instrument
+{
+	#border: 1px solid pink;
+	width: 200px;
+	float: left;
+}
+
+div.from
+{
+	#border: 1px solid pink;
+	width: 150px;
+	float: left;
+}
+
+div.to
+{
+	#border: 1px solid pink;
+	width: 150px;
+	float: left;
+}
+
+div.hours
+{
+	#border: 1px solid orange;
+	width: 75px;
+	float: left;
+}
+
+div.estimate
+{
+	#border: 1px solid gray;
+	width: 75px;
+	float: left;
+}
+
+div.createdAt
+{
+	#border: 1px solid gray;
+	width: 150px;
+	float: left;
+}
+
+div.spacer
+{
+	#border: 1px solid gray;
+	width: 40px;
+	height: 10px;
+	float: left;
+}
+
+div.serviceName
+{
+	#border: 1px solid gray;
+	#width: 180px;
+	width: 250px;
+	float: left;
+}
+
+div.samples
+{
+	#border: 1px solid gray;
+	width: 95px;
+	float: left;
+}
+
+div.replicates
+{
+	#border: 1px solid gray;
+	width: 110px;
+	float: left;
+}
+
+div.prep
+{
+	#border: 1px solid gray;
+	width: 150px;
+	float: left;
+}
+
+span.label
+{	
+	display: inline-block;
+	width: 50px;
+}

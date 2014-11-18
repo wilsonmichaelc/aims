@@ -1,0 +1,191 @@
+/* Borders for containing major sections */
+.newTrainingModule,
+.existingTrainingModule{
+	padding: 10px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	max-width: 640px;
+	margin-bottom: 10px;
+}
+/*.newTrainingModule .toggleMe,*/
+.existingTrainingModule .toggleMe
+{
+	display: none;
+	margin-top: 0.5em
+}
+.existingTrainingModule .response{
+	float: right;
+}
+
+img.spinner{
+	#border: 1px solid black;
+	display: none;
+	float: right;
+}
+
+.moduleInfo{
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	max-width: 640px;
+	margin-bottom: 10px;
+}
+
+.trainingDocuments
+{
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	max-width: 640px;
+	margin-bottom: 10px;
+}
+.trainingDocuments div
+{
+	margin-left: 30px;
+}
+div.document
+{
+	width: 550px;
+	height: 40px;
+}
+
+.trainingQuestions
+{
+	padding: 2px;
+	border-top-left-radius: 0.4em;
+	border-bottom-left-radius: 0.4em;
+	border-top-right-radius: 0.4em;
+	border-bottom-right-radius: 0.4em;
+	box-shadow: 0 0 0.25em 0em rgba(0,0,0,0.25);
+	max-width: 640px;
+	margin-bottom: 10px;
+}
+
+.trainingQuestions div
+{
+	margin-left: 30px;
+}
+
+span#indent
+{
+	margin-left: 30px;
+}
+
+span
+{
+	margin-left: 25px;
+}
+
+
+/* For input */
+input[name="name"]
+{
+	width: 200px;
+}
+
+input[name="contact"]
+{
+	width: 200px;
+}
+
+input[name="contactEmail"]
+{
+	width: 210px;
+}
+input[name="files"]
+{
+	max-width: 250px;
+	border: none;	
+}
+#question
+{
+	width: 420px;
+}
+#answer
+{
+	width: 420px;
+}
+#lineBreak{
+	width: 640px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-bottom: 2px solid black;
+}
+
+
+/* Buttons */
+input[value="active"]
+{
+	width: 65px;
+	color: white;
+	background-color: #026502;
+	
+}
+input[value="inactive"]
+{
+	width: 65px;
+	color: white;
+	background-color: #a30202;
+}
+input[name="status"]{
+	float: right;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+}
+input[name="status"]:focus
+{
+	#outline: black;
+	box-shadow: none;
+}
+input[type="button"]:hover
+{
+	background-color: #3a5473 !important;
+	color: white !important;
+}
+input[name="addMCQuestion"]
+{
+	width: 150px;
+}
+input[name="addTFQuestion"]
+{
+	width: 130px;
+}
+input[name="remove"]
+{
+	width: 70px;
+	float: right;
+}
+input[name="createTrainingModule"]
+{
+	width: 50px;
+	float: right;
+}
+input[name="updateTrainingModule"]
+{
+	width: 75px;
+	float: right;
+}
+
+input[name="updateInfo"],
+input[name="updateFiles"]
+{
+	width: 50px;
+	float: right;
+}
+input[name="removeDocument"]
+{
+	width: 60px;
+	float: right;
+}
+span.toggle:hover{
+	cursor: pointer;
+}

@@ -1,0 +1,23 @@
+input[name="city"]{
+	width: 300px;
+}
+select[name="state"]{
+	width: 150px;
+
+}
+input[name="zip"]{
+	width: 143px;
+}
+input[name="phone"]{
+	width: 298px;
+}
+input[name="fax"]{
+	width: 298px;
+}
+input[name="projectCostingBusinessUnit"],
+input[name="projectId"],
+input[name="departmentId"],
+input[name="purchaseOrder"]
+{
+	#width: 198px;
+}
