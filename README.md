@@ -12,7 +12,7 @@ LAMP Stack
 Import the SQL file located in the SQL directory. It will perform the following...
 
 1. Create the database "aims" and all the tables needed. 
-2. Create an SQL user called "aims" with password "#SecretPassword#"
+2. Create an SQL user called "aims" with password "#MySecretPassword#". You will probably want to change this password.
 3. Grant CREATE, DELETE, INSERT, SELECT, UPDATE on aims.* to "aims" user that was just created.
 4. Insert new user "admin" into the "users" table so you can login to the system and have full control. Password is "password" so make sure you change it.
 
