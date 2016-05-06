@@ -53,10 +53,10 @@ $analysisServices = $mscServices->getAnalysisServices();
 
 			<!-- Content -->
 			<div id="content">
-			
+
 				<!-- Inner Content -->
 				<div id="content-inner">
-			
+
 						<!-- Post -->
 						<article class="is-post is-post-excerpt">
 
@@ -73,14 +73,14 @@ $analysisServices = $mscServices->getAnalysisServices();
 								</ul>
 							</div>
 							<!-- /Inner Menu -->
-							
+
 							<header>
 								<h2><a href="#">New Service Request</a></h2>
 								<?php if( (count($projects) != 0) && (count($analysisServices) != 0) ): ?>
 									<span class="byline">We offer a range of proteomics and small molecule services.</span>
 								<?php endif; ?>
 								<span class="byline">
-									<?php 
+									<?php
 										// show negative messages
 										if ($newServiceRequest->errors) { foreach ($newServiceRequest->errors as $error) { echo '<div class="error">' . $error . '</div>'; } }
 										// show positive messages
@@ -97,17 +97,17 @@ $analysisServices = $mscServices->getAnalysisServices();
 								<?php elseif( count($analysisServices) == 0 ): ?>
 										<span class="byline error">It looks like we aren't offering any services at this time. Please check back soon!</span>
 								<?php else: ?>
-							
+
 								<!-- Create a new project -->
 								<section class="is-form">
 									<form action="newService.php" method="post" id="newServiceRequest" accept-charset="UTF-8">
-									
+
 										<div><strong>Sample Information</strong></div>
-									
+
 										<div class="column-container">
 											<p></p>
 											Required Information<br>
-											
+
 											<select name="projectId" required>
 												<option value="">Choose a project...</option>
 												<?php if(count($projects) != 0): ?>
@@ -118,12 +118,12 @@ $analysisServices = $mscServices->getAnalysisServices();
 													<?php endforeach; ?>
 												<?php endif; ?>
 											</select>
-											
+
 											<input type="text" class="text" name="label" placeholder="Sample Label" required/>
 											<input type="text" class="text" name="concentration" placeholder="Concentration" required/>
 											<input type="radio" class="radio" name="state" value="solid" required="true" checked/>Solid
 											<input type="radio" class="radio" name="state" value="liquid" required/>Liquid
-											<input type="text" class="text" name="composition" placeholder="Sample Composition" required/>
+											<input type="text" class="text" name="composition" placeholder="Buffer Composition" required/>
 											<input type="text" class="text" name="digestionEnzyme" placeholder="Digestion Enzyme" required/>
 											<input type="text" class="text" name="species" placeholder="Taxonomy (species)" required/>
 											<p></p>
@@ -136,19 +136,19 @@ $analysisServices = $mscServices->getAnalysisServices();
 											<textarea type="text" class="text" name="sequence" placeholder="Sequence"></textarea>
 											<textarea type="textarea" class="text" name="comments" placeholder="Comments"></textarea>
 										</div>
-										
+
 										<div>
 											<strong>Services Requested</strong><p></p>
 										</div>
-										
+
 										<div class="column-container" id="allServices">
-											
+
 											<?php foreach($analysisServices as $service): ?>
-											
+
 												<div id="analysisService" class="service-box-border service-box">
 													<div id="id" value="<?php echo $service['id']; ?>"></div>
 													<input id="service" type="checkbox" name="<?php echo 'msc' . $service['id']; ?>" />&nbsp;<?php echo $service['name']; ?>
-													
+
 													<div style="width: 90px; float: right;">
 														<select id="replicates" name="<?php echo $service['id']; ?>_Replicates">
 															<option value="1">Replicates?</option>
@@ -157,10 +157,10 @@ $analysisServices = $mscServices->getAnalysisServices();
 															<option value="3">triplicate</option>
 														</select>
 													</div>
-													
+
 													<input id="samples" type="number" min="1" step="1" class="text" name="<?php echo $service['id']; ?>_Samples" placeholder="# Samples" style="width: 100px; float: right;"/>
 
-													<?php if($service['samplePrepId'] != ''): ?>
+													<?php if($service['samplePrepId'] != 0): ?>
 														<?php $prepService = $mscServices->getPrepService($service['id']); ?>
 														<div class="sample-prep">
 															<input id="prep" type="checkbox" name="<?php echo $service['id']; ?>_Prep" value="<?php echo $prepService['id']; ?>"/>My samples will also need to be prepped.
@@ -169,18 +169,18 @@ $analysisServices = $mscServices->getAnalysisServices();
 														<div class="sample-prep">
 														</div>
 													<?php endif; ?>
-													
+
 												</div>
-												
+
 											<?php endforeach; ?>
 										</div>
-										
+
 										<p></p>
-										<div class="column-container">
+										<div class="column-container" style="display: none;"> <!-- Add: style="display: none;" to remove estimate from this page -->
 											<strong>Cost Estimate </strong>
 											<input style="width: 150px;" type="text" id="estimate" name="estimate" disabled/>
 										</div>
-										
+
 										<p></p>
 										<div class="column-container">
 											<input type="hidden" name="accountType" value="<?php echo $_SESSION['accountType']; ?>" />
@@ -189,30 +189,30 @@ $analysisServices = $mscServices->getAnalysisServices();
 
 									</form>
 								</section>
-								
+
 								<?php endif; ?>
-								
+
 							</div>
 							<!-- End Page Content -->
-							
+
 						</article>
 						<!-- End Post -->
 
 				</div>
 				<!-- /Inner Content -->
-				
+
 			</div>
 			<!-- /Content -->
-				
+
 			<!-- Sidebar -->
 			<div id="sidebar">
-			
+
 				<!-- Logo -->
 				<div id="logo">
 					<h1>AIMS</h1>
 				</div>
 				<!-- /Logo -->
-		
+
 				<!-- Logout -->
 				<section>
 					<div class="inner">
@@ -221,7 +221,7 @@ $analysisServices = $mscServices->getAnalysisServices();
 					</div>
 				</section>
 				<!-- /Logout -->
-				
+
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
@@ -240,7 +240,7 @@ $analysisServices = $mscServices->getAnalysisServices();
 				<!-- Search -->
 					<?php include("php/includes/search.php"); ?>
 				<!-- /Search -->
-		
+
 				<!-- Text -->
 				<section class="is-text-style1">
 					<div class="inner">
@@ -254,7 +254,7 @@ $analysisServices = $mscServices->getAnalysisServices();
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>
@@ -265,7 +265,7 @@ $analysisServices = $mscServices->getAnalysisServices();
 
 		</div>
 		<!-- /Wrapper -->
-		
+
 		<!-- Scripts -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/skel.min.js"></script>

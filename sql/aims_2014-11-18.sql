@@ -22,7 +22,7 @@
 # Create the databse and user to access db
 # ------------------------------------------------------------
 CREATE DATABASE aims;
-CREATE USER 'aims'@'localhost' IDENTIFIED BY '#MySecretPassword#';
+CREATE USER 'aims'@'localhost' IDENTIFIED BY 'password';
 GRANT CREATE,DELETE,INSERT,SELECT,UPDATE ON aims.* TO 'aims'@'localhost';
 FLUSH PRIVILEGES;
 USE aims;

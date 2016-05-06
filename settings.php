@@ -75,7 +75,7 @@ if ($login->isUserLoggedIn() == false) {
 
 							<!-- Page Content -->
 							<section class="is-form">
-								<div class="page-content-min-height column-container">
+								<div class="page-content-min-height column-container" style="overflow: visible;">
 								
 									<span class="byline">Change Password</span>
 									<form method="post" action="settings.php">
@@ -169,7 +169,7 @@ if ($login->isUserLoggedIn() == false) {
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>

@@ -1,10 +1,14 @@
 <?php
+
+//mysql_set_charset('utf8');	
+
 class ProjectInfo
 {
 	
     private $db_connection            		= null;    // database connection   
     public  $errors                   		= array(); // collection of error messages
     public  $messages                 		= array(); // collection of success / neutral messages
+
     
     private function databaseConnection()
     {

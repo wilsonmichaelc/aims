@@ -1364,6 +1364,7 @@ form[name="newType"]  input,
 form[name="updateType"]  input{
 	width: 100px;
 }
+
 /*********************************************************************************/
 /* IMS Custom Style for AdminServices page                                       */
 /*********************************************************************************/
@@ -1439,7 +1440,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 	.column-container 
 	{
 		max-width: 602px;
-		overflow: auto;
+		#overflow: auto;
 	}
 	
 	.column-container-wide

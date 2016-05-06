@@ -1,15 +1,16 @@
 <?php
+require_once("./php/config/config.php");
 class NewServiceRequest
 {
-	
-    private $db_connection            		= null;    // database connection   
+
+    private $db_connection            		= null;    // database connection
     public  $errors                   		= array(); // collection of error messages
     public  $messages                 		= array(); // collection of success / neutral messages
-    
+
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
      * you know, when you do "$login = new Login();"
-     */    
+     */
     public function __construct()
     {
         // if we have such a POST request, call the registerNewUser() method
@@ -31,16 +32,16 @@ class NewServiceRequest
 
 			$this->createServiceRequest(
 				$_SESSION['id'],
-				$_POST['projectId'], 
-				$_POST['label'], 
-				$_POST['concentration'], 
-				$_POST['state'], 
-				$_POST['composition'], 
+				$_POST['projectId'],
+				$_POST['label'],
+				$_POST['concentration'],
+				$_POST['state'],
+				$_POST['composition'],
 				$_POST['digestionEnzyme'],
 				$_POST['species'],
 				$_POST['purification'],
 				$_POST['redoxChemicals'],
-				$_POST['molecularWeight'], 
+				$_POST['molecularWeight'],
 				$_POST['suspectedModifications'],
 				$_POST['aaModifications'],
 				$_POST['sequence'],
@@ -49,7 +50,7 @@ class NewServiceRequest
 			);
 
         }
-        
+
         if(isset($_GET['success'])){
 	        $this->messages[] = "Your request has been submitted! We will contact you if we have any questions.";
         }
@@ -79,17 +80,17 @@ class NewServiceRequest
             }
         }
     }
-    
+
     private function createServiceRequest($userId, $projectId, $label, $concentration, $state, $composition, $digestionEnzyme, $species, $purification, $redoxChemicals, $molecularWeight, $suspectedModifications, $aaModifications, $sequence, $comments, $servicesSelected)
     {
-        
+
         if ($this->databaseConnection()) {
-        
+
         	try{
-        	
+
         		$this->db_connection->beginTransaction();
-        		
-        		$query = $this->db_connection->prepare('INSERT INTO mscServiceRequest (userId, projectId, label, concentration, state, composition, digestionEnzyme, species, purification, redoxChemicals, molecularWeight, suspectedModifications, aaModifications, sequence, comments) 
+
+        		$query = $this->db_connection->prepare('INSERT INTO mscServiceRequest (userId, projectId, label, concentration, state, composition, digestionEnzyme, species, purification, redoxChemicals, molecularWeight, suspectedModifications, aaModifications, sequence, comments)
         		VALUES(:userId, :projectId, :label, :concentration, :state, :composition, :digestionEnzyme, :species, :purification, :redoxChemicals, :molecularWeight, :suspectedModifications, :aaModifications, :sequence, :comments)');
 		        $query->bindValue(':userId', $userId, PDO::PARAM_INT);
 		        $query->bindValue(':projectId', $projectId, PDO::PARAM_INT);
@@ -108,7 +109,7 @@ class NewServiceRequest
 		        $query->bindValue(':comments', $comments, PDO::PARAM_STR);
 		        $query->execute();
 				$lastRequestId = $this->db_connection->lastInsertId();
-				
+
 				foreach($servicesSelected as $service){
 			        $query = $this->db_connection->prepare('INSERT INTO mscServicesSelected (requestId, serviceId, samples, prep, replicates) VALUES(:requestId, :serviceId, :samples, :prep, :replicates)');
 			        $query->bindValue(':requestId', $lastRequestId, PDO::PARAM_INT);
@@ -118,9 +119,9 @@ class NewServiceRequest
 			        $query->bindValue(':prep', $service['prep'], PDO::PARAM_INT);
 			        $query->execute();
 		        }
-				
+
 				$status = $this->db_connection->commit();
-	        	
+
         	}catch(PDOException $PDOEx){
         		$this->db_connection->rollBack();
 	        	throw $PDOEx;
@@ -133,25 +134,25 @@ class NewServiceRequest
         	}else{
 	        	$this->errors[] = "Something went wrong when we tried to create your service request.";
         	}
-				
-        }
-        
-    }
-    
 
-    
+        }
+
+    }
+
+
+
     private function startsWith($haystack, $needle){
 	    return $needle === "" || strpos($haystack, $needle) === 0;
 	}
-	
+
 	private function sendNewFFSEmail($userId, $projectId, $lastRequestId, $comments, $servicesSelected)
     {
     	if ($this->databaseConnection()) {
-	    	$query = $this->db_connection->prepare('SELECT first, last FROM users WHERE id=:id');
-			$query->bindValue(':id', $userId, PDO::PARAM_INT);
-			$query->execute();
-			$user = $query->fetch(PDO::FETCH_ASSOC);
-		}
+	       $query = $this->db_connection->prepare('SELECT first, last FROM users WHERE id=:id');
+			   $query->bindValue(':id', $userId, PDO::PARAM_INT);
+			   $query->execute();
+			   $user = $query->fetch(PDO::FETCH_ASSOC);
+		  }
         $mail = new PHPMailer;
         $body = '<html><body><div>';
 
@@ -164,34 +165,38 @@ class NewServiceRequest
             //useful for debugging, shows full SMTP errors
             $mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
             // Enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
             // Enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
             }
             // Specify host server
-            $mail->Host = EMAIL_SMTP_HOST;  
-            $mail->Username = EMAIL_SMTP_USERNAME;                            
-            $mail->Password = EMAIL_SMTP_PASSWORD;                      
-            $mail->Port = EMAIL_SMTP_PORT;       
+            $mail->Host = EMAIL_SMTP_HOST;
+            $mail->Username = EMAIL_SMTP_USERNAME;
+            $mail->Password = EMAIL_SMTP_PASSWORD;
+            $mail->Port = EMAIL_SMTP_PORT;
 
         } else {
 
-            $mail->IsMail();            
+            $mail->IsMail();
         }
-        
+
         $mail->IsHTML(true);
 
         $mail->From = EMAIL_NEW_FFS_FROM;
-        $mail->FromName = EMAIL_NEW_FFS_FROM_NAME;        
-        $mail->AddAddress('ygoo@rx.umaryland.edu');
+        $mail->FromName = EMAIL_NEW_FFS_FROM_NAME;
+
+        foreach(EMAIL_FFS_ALERTS as $email){
+          $mail->AddAddress($email);
+        }
+
         $mail->Subject = EMAIL_NEW_FFS_FROM_SUBJECT;
 
 		$body .= '<p><b>' . $user['first'] . ' ' . $user['last'] . '</b> has submitted a FFS request!</p>';
 		$body .= '<div>ProjectID: ' . $projectId . '</div>';
 		$body .= '<div>RequestID: ' . $lastRequestId . '</div>';
 		$body .= '<div>Comments: ' . $comments . '</div>';
-		
+
 		foreach($servicesSelected as $service){
 			if ($this->databaseConnection()) {
 		    	$query = $this->db_connection->prepare('SELECT name FROM mscAnalysisServices WHERE id=:id');
@@ -201,7 +206,7 @@ class NewServiceRequest
 			}
 	        $body .= '<div><b>Service:</b>' . $name . ' (' . $service['service'] . ')</div>';
 	        $body .= '<div>Samples:' . $service['samples'] . '</div>';
-	        
+
 	        $body .= '<div>Replicates:';
 	        	if($service['replicates'] == 1){
 	        		$body .= 'none';
@@ -211,7 +216,7 @@ class NewServiceRequest
 		        	$body .= 'three';
 	        	}
 	        $body .= '</div>';
-	        
+
 	        $body .= '<div>Prep:';
 	        if($service['prep'] == 0){
 	        		$body .= 'no';
@@ -220,7 +225,7 @@ class NewServiceRequest
 	        	}
 	        $body .= '</div><br>';
         }
-		
+
 		$body .= '<div>Please login to view this request.</div>';
 		$body .= '</p></div></body></html>';
 
@@ -232,6 +237,6 @@ class NewServiceRequest
 	        return true;
         }
     }
-		
+
 }
 ?>

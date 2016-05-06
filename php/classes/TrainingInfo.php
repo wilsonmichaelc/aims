@@ -38,7 +38,7 @@ class TrainingInfo
 	        $query->bindValue(':moduleId', $moduleId, PDO::PARAM_INT);
 	        $query->bindValue(':userId', $userId, PDO::PARAM_INT);
 			$query->execute();
-			return $query->fetch(PDO::FETCH_ASSOC);
+			return $query->fetchAll(PDO::FETCH_ASSOC);
 
         }
         

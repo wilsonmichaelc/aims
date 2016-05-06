@@ -51,17 +51,17 @@ if ($_SESSION['isAdmin'] == 0){
 
 			<!-- Content -->
 			<div id="content">
-			
+
 				<!-- Inner Content -->
 				<div id="content-inner">
-			
+
 						<!-- Post -->
 						<article class="is-post is-post-excerpt">
 
 							<!-- Inner Menu -->
 							<div class="info menu">
 								<span class="date">
-									<span class="fa fa-pencil-square-o"></span> 
+									<span class="fa fa-pencil-square-o"></span>
 								</span>
 								<ul class="stats">
 									<li><a href="adminStats.php">Stats</a></li>
@@ -72,15 +72,18 @@ if ($_SESSION['isAdmin'] == 0){
 									<li><a href="adminTraining.php">Training</a></li>
 									<li><a href="adminFAQ.php">FAQ</a></li>
 									<li><a href="adminAccountTypes.php">Accounts</a></li>
+									<li><a href="adminBookingRates.php">Rates</a></li>
+									<li><a href="adminInstrumentAccess.php">Access</a></li>
+									<li><a href="adminInvoiceSearch.php">Invoice-Search</a></li>
 								</ul>
 							</div>
 							<!-- /Inner Menu -->
-							
+
 							<header>
 								<span class="byline">Generate Invoice</span>
 							</header>
 							<div>
-								
+
 								<!-- Select a month and year -->
 								<span class="label">Select A Date Range:</span>
 								<div>
@@ -123,8 +126,9 @@ if ($_SESSION['isAdmin'] == 0){
 									</select>
 									<input type="button" name="getUsersForSelection" value="Search" />
 								</div>
+								<!--<div style="color:red;">DO NOT USE... UNDER CONSTRUCTION</div>-->
 								<!-- /Select a month and year -->
-								
+
 								<!-- List users that have done work for the month selected USE AJAX -->
 								<div class="userList" style="display: none;">
 									<br /><span class="label">Select A User:</span>
@@ -142,7 +146,7 @@ if ($_SESSION['isAdmin'] == 0){
 
 								<!-- Display the spinner while searching in case it takes some time -->
 								<div id="spinner" style="display: none;">Searching ... </div>
-								
+
 								<!-- -->
 								<div class="project"></div>
 								<div class="bookings"></div>
@@ -155,28 +159,28 @@ if ($_SESSION['isAdmin'] == 0){
 								<span id="requestIds"></span>
 								<span id="trainingIds"></span>
 								-->
-								
+
 							</div>
-							
+
 						</article>
 						<!-- End Post -->
 
 				</div>
-				
+
 				<!-- /Inner Content -->
-				
+
 			</div>
 			<!-- /Content -->
-				
+
 			<!-- Sidebar -->
 			<div id="sidebar">
-			
+
 				<!-- Logo -->
 				<div id="logo">
 					<h1>AIMS</h1>
 				</div>
 				<!-- /Logo -->
-		
+
 				<!-- Logout -->
 				<section>
 					<div class="inner">
@@ -185,7 +189,7 @@ if ($_SESSION['isAdmin'] == 0){
 					</div>
 				</section>
 				<!-- /Logout -->
-				
+
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
@@ -204,7 +208,7 @@ if ($_SESSION['isAdmin'] == 0){
 				<!-- Search -->
 					<?php include("php/includes/search.php"); ?>
 				<!-- /Search -->
-		
+
 				<!-- Text -->
 				<section class="is-text-style1">
 					<div class="inner">
@@ -218,7 +222,7 @@ if ($_SESSION['isAdmin'] == 0){
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>
@@ -229,14 +233,13 @@ if ($_SESSION['isAdmin'] == 0){
 
 		</div>
 		<!-- /Wrapper -->
-		
-		<!-- Scripts -->		
+
+		<!-- Scripts -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
 		<script src="js/adminInvoiceBeta.js"></script>
-		<script src="js/adminInvoiceBeta2.js"></script>
 		<!-- /Scripts -->
 
 	</body>

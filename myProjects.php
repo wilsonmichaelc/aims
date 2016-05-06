@@ -51,21 +51,21 @@ if ($login->isUserLoggedIn() == false) {
 
 			<!-- Content -->
 			<div id="content">
-			
+
 				<!-- Inner Content -->
 				<div id="content-inner">
-			
+
 					<!-- project -->
 					<div>
-					
+
 						<!-- Print out the project information -->
 						<?php $projects = $projectInfo->getActiveProjects($_SESSION['id']); ?>
-						
+
 						<?php if(sizeOf($projects) > 0): ?>
 							<?php foreach($projects as $project): ?>
-							
+
 								<article class="is-post is-post-excerpt">
-								
+
 									<div class="info">
 										<span class="date">
 											<span class="fa fa-file"></span>
@@ -74,27 +74,27 @@ if ($login->isUserLoggedIn() == false) {
 											&nbsp;&nbsp;&nbsp;&nbsp;ID: <?php echo $project['id']; ?>
 										</span>
 									</div>
-								
+
 									<header>
 										<h2><a href="#"><?php echo $project['title']; ?></a></h2>
 									</header>
-											
+
 									<div class="project-info-tab" id="id<?php echo $project['id']; ?>" style="background-color: rgba(154, 154, 154, .5);">Info</div>
 									<div class="project-services-tab" id="id<?php echo $project['id']; ?>">Services</div>
 									<div class="project-bookings-tab" id="id<?php echo $project['id']; ?>">Bookings</div>
 									<div class="ProjectResponse" id="project<?php echo $project['id']; ?>"></div>
-									
-									
+
+
 									<!-- Project Container -->
 									<div class="project-container">
-									
+
 										<!-- Project Info -->
 										<form method="post" action="javascript:void(0)" name="updateProject">
 											<div class="project-info" id="id<?php echo $project['id']; ?>">
 												<div class="project-column-container">
-												
+
 													<div class="project-column-2 left">
-														
+
 														<div id="project-id">
 															<span class="label">Project ID:</span>
 															<span class="input">
@@ -102,22 +102,22 @@ if ($login->isUserLoggedIn() == false) {
 																<input type="text" value="<?php echo $project['id']; ?>" disabled="true"/>
 															</span>
 														</div>
-														
+
 														<div id="project-title">
 															<span class="label">Title:</span>
 															<span class="input">
 																<input type="text" name="title" value="<?php echo $project['title']; ?>" />
 															</span>
 														</div>
-														
-														
+
+
 														<div id="project-pi">
 															<span class="label">Primary Investigator:</span>
 															<span class="input">
 																<input class="input-disabled" type="text" value="<?php echo $project['primaryInvestigator']; ?>" disabled="true"/>
 															</span>
 														</div>
-				
+
 														<?php $payment = $projectInfo->getPaymentInfo($project['paymentId']); ?>
 														<div id="project-payment">
 															<span class="label">PCBU:</span>
@@ -125,31 +125,31 @@ if ($login->isUserLoggedIn() == false) {
 																<input class="input-disabled" type="text" value="<?php echo $payment['projectCostingBusinessUnit']; ?>" disabled="true"/>
 															</span>
 														</div>
-														
+
 														<div id="project-payment">
 															<span class="label">Project ID:</span>
 															<span class="input">
 																<input class="input-disabled" type="text" value="<?php echo $payment['projectId']; ?>" disabled="true"/>
 															</span>
 														</div>
-														
+
 														<div id="project-payment">
 															<span class="label">Department ID:</span>
 															<span class="input">
 																<input class="input-disabled" type="text" value="<?php echo $payment['departmentId']; ?>" disabled="true"/>
 															</span>
 														</div>
-														
+
 														<div id="project-payment">
 															<span class="label">Purchase Order:</span>
 															<span class="input">
 																<input class="input-disabled" type="text" value="<?php echo $payment['purchaseOrder']; ?>" disabled="true"/>
 															</span>
 														</div>
-														
+
 													</div>
-													
-													
+
+
 													<div class="project-column-2 right">
 														<div id="project-address1">
 															<span class="label">Address:</span>
@@ -157,42 +157,42 @@ if ($login->isUserLoggedIn() == false) {
 																<input type="text" name="addressOne" value="<?php echo $project['addressOne']; ?>" />
 															</span>
 														</div>
-														
+
 														<div id="project-address2">
 															<span class="label">&nbsp;</span>
 															<span class="input">
 																<input type="text" name="addressTwo" value="<?php echo $project['addressTwo']; ?>" />
 															</span>
 														</div>
-														
+
 														<div id="project-city">
 															<span class="label">City:</span>
 															<span class="input">
 																<input type="text" name="city" value="<?php echo $project['city']; ?>" />
 															</span>
 														</div>
-														
+
 														<div id="project-state">
 															<span class="label">State:</span>
 															<span class="input">
 																<input type="text" name="state" value="<?php echo $project['state']; ?>" />
 															</span>
 														</div>
-														
+
 														<div id="project-zip">
 															<span class="label">Zip:</span>
 															<span class="input">
 																<input type="text" maxlength="10" name="zip" value="<?php echo $project['zip']; ?>" />
 															</span>
 														</div>
-														
+
 														<div id="project-phone">
 															<span class="label">Phone:</span>
 															<span class="input">
 																<input type="text" name="phone" value="<?php echo $project['phone']; ?>" />
 															</span>
 														</div>
-														
+
 														<div id="project-fax">
 															<span class="label">Fax:</span>
 															<span class="input">
@@ -201,7 +201,7 @@ if ($login->isUserLoggedIn() == false) {
 														</div>
 													</div>
 												</div>
-																					
+
 												<div class="project-column-abstract">
 													<div id="project-abstract">Abstract:</div>
 													<div id="project-abstract">
@@ -211,14 +211,14 @@ if ($login->isUserLoggedIn() == false) {
 											</div>
 										</form>
 										<!-- /Project Info -->
-										
+
 										<!-- Services-->
 										<div class="project-services" id="id<?php echo $project['id']; ?>" style="display: none; overflow: auto;">
 											<?php $services = $serviceInfo->getActiveServiceRequests($project['id']); ?>
 											<?php if(sizeof($services) >0): ?>
 												<?php foreach($services as $service): ?>
 													<div class="project-column-container">
-														
+
 														<div>
 															<span>ID: <b><?php echo $service['id']; ?></b></span>
 															<?php if($service['status'] == 'closed'): ?>
@@ -231,103 +231,103 @@ if ($login->isUserLoggedIn() == false) {
 																<span style="float: right; color: black;"><?php echo $service['status']; ?></span>
 															<?php endif; ?>
 														</div>
-														
+
 														<div class="project-column-2 left" style="padding: 2px; margin: 2px; margin-left: 3px;">
-															
+
 															<div id="project-id">
 																<span class="label">Created:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['createdAt']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 															<div id="project-title">
 																<span class="label">Label:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['label']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
-															
+
+
 															<div id="project-pi">
 																<span class="label">Concentration:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['concentration']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 															<div id="project-payment">
 																<span class="label">State:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['state']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 															<div id="project-payment">
 																<span class="label">Composition:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['composition']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 															<div id="project-payment">
 																<span class="label">Digestion Enzyme:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['digestionEnzyme']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 														</div>
-														
+
 														<div class="project-column-2 right" style="padding: 2px; margin: 2px;">
-															
+
 															<div id="project-id">
 																<span class="label">Purification:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['purification']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 															<div id="project-title">
 																<span class="label">Reduction/Alkylation:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['redoxChemicals']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
-															
+
+
 															<div id="project-pi">
 																<span class="label">Molecular Weight:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['molecularWeight']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 															<div id="project-payment">
 																<span class="label">Suspected Mods:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['suspectedModifications']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 															<div id="project-payment">
 																<span class="label">Amino Acid Mods:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['aaModifications']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 															<div id="project-payment">
 																<span class="label">Species:</span>
 																<span class="input">
 																	<input type="text" value="<?php echo $service['species']; ?>" disabled="true"/>
 																</span>
 															</div>
-															
+
 														</div>
-														
+
 													</div>
-													
+
 													<div class="project-column-1">
 														<div id="project-abstract">Sequence:</div>
 														<div id="project-abstract">
@@ -340,9 +340,9 @@ if ($login->isUserLoggedIn() == false) {
 															<textarea disabled="true"><?php echo $service['comments']; ?></textarea>
 														</div>
 													</div>
-													
-													
-																	
+
+
+
 													Services Selected:<br>
 													<?php $servicesSelected = $serviceInfo->getServicesSelected($service['id']); ?>
 													<?php foreach($servicesSelected as $service): ?>
@@ -360,14 +360,14 @@ if ($login->isUserLoggedIn() == false) {
 														?>
 														</div>
 													<?php endforeach; ?>
-																			
+
 												<?php endforeach; ?>
 											<?php else: ?>
 												<div>This project has no associated fee-for-service requests.</div>
 											<?php endif; ?>
 										</div>
 										<!-- /Services -->
-										
+
 										<!-- Bookings-->
 										<div class="project-bookings" id="id<?php echo $project['id']; ?>" style="display: none;">
 											<?php $bookings = $bookingInfo->getBookings($project['id'], $_SESSION['id']); ?>
@@ -379,7 +379,7 @@ if ($login->isUserLoggedIn() == false) {
 													ID:<b><?php echo $booking['id']; ?></b><br>
 													&nbsp;&nbsp;&nbsp;&nbsp;<?php echo '<span style="color: ' . $instrument['color'] . '">' .  $instrument['name'] . '</span>: ' . $instrument['model']; ?><br>
 													&nbsp;&nbsp;&nbsp;&nbsp;
-													<?php 
+													<?php
 														$from = $booking['dateFrom'] . ' ' . $booking['timeFrom'];
 														$to = $booking['dateTo'] . ' ' . $booking['timeTo'];
 														echo date("F j, Y, g:i a",strtotime($from));
@@ -399,18 +399,18 @@ if ($login->isUserLoggedIn() == false) {
 											<?php endif; ?>
 										</div>
 										<!-- /Bookings -->
-									
+
 									</div>
 									<!-- /Project Container -->
 
-									<a href="newProject.php">Create a new project</a>
-									
+									<a href="newProject.php">Create a new project</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="newTraining.php">Get instrument training</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="newBooking.php">Book an instrument</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="newService.php">Request services</a>
+
 								</article>
-							
+
 							<?php endforeach; ?>
 						<?php else: ?>
 							<article class="is-post is-post-excerpt">
-								
+
 									<div class="info">
 										<span class="date">
 											<span class="fa fa-file"></span>
@@ -419,34 +419,34 @@ if ($login->isUserLoggedIn() == false) {
 											&nbsp;&nbsp;&nbsp;&nbsp;
 										</span>
 									</div>
-								
+
 									<header>
 										<h2><a href="#">Looks like you don't have any projects yet..</a></h2>
 										<span class="byline"><a href="newProject.php">Click here to create one</a></span>
 									</header>
-									
+
 							</article>
 						<?php endif; ?>
-					
+
 					</div>
 					<!--/project -->
 
 
 				</div>
 				<!-- /Inner Content -->
-				
+
 			</div>
 			<!-- /Content -->
-				
+
 			<!-- Sidebar -->
 			<div id="sidebar">
-			
+
 				<!-- Logo -->
 				<div id="logo">
 					<h1>AIMS</h1>
 				</div>
 				<!-- /Logo -->
-		
+
 				<!-- Logout -->
 				<section>
 					<div class="inner">
@@ -455,7 +455,7 @@ if ($login->isUserLoggedIn() == false) {
 					</div>
 				</section>
 				<!-- /Logout -->
-				
+
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
@@ -474,7 +474,7 @@ if ($login->isUserLoggedIn() == false) {
 				<!-- Search -->
 					<?php include("php/includes/search.php"); ?>
 				<!-- /Search -->
-		
+
 				<!-- Text -->
 				<section class="is-text-style1">
 					<div class="inner">
@@ -488,7 +488,7 @@ if ($login->isUserLoggedIn() == false) {
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>
@@ -499,7 +499,7 @@ if ($login->isUserLoggedIn() == false) {
 
 		</div>
 		<!-- /Wrapper -->
-		
+
 		<!-- Scripts -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/skel.min.js"></script>

@@ -43,19 +43,19 @@ if ($login->isUserLoggedIn() == false) {
 
 			<!-- Content -->
 			<div id="content">
-			
+
 				<!-- Inner Content -->
 				<div id="content-inner">
-			
+
 						<!-- Post -->
 						<article class="is-post is-post-excerpt">
 
 							<div class="info">
 								<span class="date">
-									<span class="fa fa-question-circle"></span> 
+									<span class="fa fa-question-circle"></span>
 								</span>
 							</div>
-							
+
 							<header>
 								<h2><a href="#">Help</a></h2>
 								<span class="byline">How to use this site...</span>
@@ -69,12 +69,12 @@ if ($login->isUserLoggedIn() == false) {
 									<ul>
 										<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you already have a project for which you would like to submit samples, feel free to skip this step</li>
 									</ul>
-									<li>Complete the "Fee For Service" form to begin the process - We will contact you if we have any questions</li>
+									<li>Click on the "Home" button. Then click "Services" on the submenu located under the blinking down arrow. Complete the form to begin the process - We will contact you if we have any questions</li>
 									<ul>
 										<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If this is your first time using our services feel free to contact us with any questions you may have (see below for contact info)</li>
 									</ul>
 								</ul>
-								
+
 								<h3>Training</h3>
 								<ul>
 									<li>Select "Training" from the home page menu</li>
@@ -83,7 +83,7 @@ if ($login->isUserLoggedIn() == false) {
 									<li>Click "Hands On Training" to request a training session. Choose the project you wish to be used for billing.</li>
 									<li>You can check the "Hands on Training" section for updates. When your session is scheduled it will appear here.</li>
 								</ul>
-								
+
 								<h3>Instrument Booking</h3>
 								<ul>
 									<li>If you have not already done so, complete the training for the instrument you would like to use</li>
@@ -93,7 +93,7 @@ if ($login->isUserLoggedIn() == false) {
 
 									<li>Click "Submit" when you are ready to book</li>
 								</ul>
-								
+
 								<h3>Create A Project</h3>
 								<ul>
 									<li>Click on the  "Home" link</li>
@@ -101,28 +101,28 @@ if ($login->isUserLoggedIn() == false) {
 									<li>Note: Its just under the blinking arrow</li>
 									<li>Or just click <a href="newProject.php">here</a></li>
 								</ul>
-								
+
 							</div>
 							<!-- End Page Content -->
-							
+
 						</article>
 						<!-- End Post -->
 
 				</div>
 				<!-- /Inner Content -->
-				
+
 			</div>
 			<!-- /Content -->
-				
+
 			<!-- Sidebar -->
 			<div id="sidebar">
-			
+
 				<!-- Logo -->
 				<div id="logo">
 					<h1>AIMS</h1>
 				</div>
 				<!-- /Logo -->
-		
+
 				<!-- Logout -->
 				<section>
 					<div class="inner">
@@ -131,7 +131,7 @@ if ($login->isUserLoggedIn() == false) {
 					</div>
 				</section>
 				<!-- /Logout -->
-				
+
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
@@ -150,7 +150,7 @@ if ($login->isUserLoggedIn() == false) {
 				<!-- Search -->
 					<?php include("php/includes/search.php"); ?>
 				<!-- /Search -->
-		
+
 				<!-- Text -->
 				<section class="is-text-style1">
 					<div class="inner">
@@ -164,7 +164,7 @@ if ($login->isUserLoggedIn() == false) {
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>
@@ -175,7 +175,7 @@ if ($login->isUserLoggedIn() == false) {
 
 		</div>
 		<!-- /Wrapper -->
-		
+
 		<!-- Scripts -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/skel.min.js"></script>

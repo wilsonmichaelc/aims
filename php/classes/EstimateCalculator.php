@@ -56,20 +56,28 @@ class EstimateCalculator
 		    
 		    $analysisRates = $this->getAnalysisRates($decodedJSON[$i]->id);
 		    
-		    if($samples > $analysisRates[$type . 'Cutoff']){
+		    if($samples >= $analysisRates[$type . 'Cutoff']){
 			    $runningTotal += ($analysisRates[$type . 'Cutoff'] * $analysisRates[$type . 'Regular']) + (($samples - $analysisRates[$type . 'Cutoff']) * $analysisRates[$type . 'Discount']);
 		    }else{
 			    $runningTotal += $analysisRates[$type . 'Regular'] * $samples;
 		    }
-		    
+
 		    if($decodedJSON[$i]->prep == 'true'){
 			    $prepRates = $this->getPrepRates($decodedJSON[$i]->id);
 			    
+			    if($samples >= $prepRates[$type . 'Cutoff']){
+			    	$runningTotal += ($prepRates[$type . 'Cutoff'] * $prepRates[$type . 'Regular']) + (($samples - $prepRates[$type . 'Cutoff']) * $prepRates[$type . 'Discount']);
+			    }else{
+				    $runningTotal = $prepRates[$type . 'Regular'] * $samples;
+			    }
+			    /*
+			    //  OLD --- DO NOT USE
 			    if($samples > $prepRates[$type . 'Cutoff']){
 				    $runningTotal += $prepRates[$type . 'Regular'] + (($samples - $prepRates[$type . 'Cutoff']) * $prepRates[$type . 'Discount']);
 			    }else{
 				    $runningTotal += $prepRates[$type . 'Regular'] * $samples;
 			    }
+			    */
 		    }
 		     
 	    }

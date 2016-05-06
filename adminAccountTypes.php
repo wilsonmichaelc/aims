@@ -70,6 +70,9 @@ if ($_SESSION['isAdmin'] == 0){
 									<li><a href="adminTraining.php">Training</a></li>
 									<li><a href="adminFAQ.php">FAQ</a></li>
 									<li class="current-page-start"><a href="adminAccountTypes.php">Accounts</a></li>
+									<li><a href="adminBookingRates.php">Rates</a></li>
+									<li><a href="adminInstrumentAccess.php">Access</a></li>
+									<li><a href="adminInvoiceSearch.php">Invoice-Search</a></li>
 								</ul>
 							</div>
 							<!-- /Inner Menu -->
@@ -87,14 +90,7 @@ if ($_SESSION['isAdmin'] == 0){
 							</header>
 				            
 							<div>
-								<div><b>New Account Type</b></div>
-								<form method="post" action="adminAccountTypes.php" name="newType">
-									<div class="ajaxResponse"></div>
-									<input type="text" name="longName" placeholder="Example: Member" required/>
-									<input type="text" name="shortName" placeholder="MEM" required/>
-									<input type="submit" name="newType" value="Submit" />
-								</form>
-								
+					
 								<div><b>Edit Account Types</b></div>
 								<?php $accounts = $accountTypes->getAccountTypes(); ?>
 								<?php if(sizeof($accounts) > 0): ?>
@@ -110,6 +106,7 @@ if ($_SESSION['isAdmin'] == 0){
 								<?php else: ?>
 									<div>There are no account types yet. Please add one using the form above.</div>
 								<?php endif; ?>
+								
 							</div>
 							
 						</article>
@@ -171,7 +168,7 @@ if ($_SESSION['isAdmin'] == 0){
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>

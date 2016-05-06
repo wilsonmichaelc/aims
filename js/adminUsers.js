@@ -12,15 +12,23 @@ $('select[name="user"]').change(function(){
 	// Get the users info and account type
 	if(user != ''){
 		$.ajax({ url: "php/classes/ajax.php",
-	         data: {request: $(this).val()},
-	         type: 'post',
-	         success: function(output){
-		         $("span#name").html('<a href="mailto:' + output[0].email + '">' + output[0].first + ' ' + output[0].last + '</a>');
-	             $("span#username").text(output[0].username);
-	             $("input[name='id']").val(output[0].id);
-	             $("select[name='accountType'] option[value='" + output[0].accountType + "']").attr('selected', 'true');
-	             $('#user_details').show();
-	         }
+			data: {request: $(this).val()},
+			type: 'post',
+			success: function(output){
+				$("span#name").html('<a href="mailto:' + output[0].email + '">' + output[0].first + ' ' + output[0].last + '</a>');
+				$("span#username").text("Username: " + output[0].username);
+				$("span#userId").text("User ID: " + output[0].id);
+				console.log(output[0].accountDisabled);
+				if(output[0].accountDisabled == 1){
+					var accountStatus = 'Account Status: <input style="height: 25px; padding: 0; background-color: #a30202; color: white;" type="button" id="accountStatus" value="Disabled">';
+				}else{
+					var accountStatus = 'Account Status: <input style="height: 25px; padding: 0; background-color: #026502; color: white;" type="button" id="accountStatus" value="Enabled">';
+				}
+				$("div#accountStatus").html(accountStatus);
+				$("input[name='id']").val(output[0].id);
+				$("select[name='accountType'] option[value='" + output[0].accountType + "']").attr('selected', 'true');
+				$('#user_details').show();
+			}
 		});
 	}else{
 		$('#user_details').hide();
@@ -91,14 +99,14 @@ $('select[name="user"]').change(function(){
 	         },
 	         type: 'post',
 	         success: function(output){
-	         
+
 	         	 var proj = '';
 	         	 var pmnt = '';
-	         	 
+
 				 $.each(output, function(i) {
-				 
+
 				 	var pmntInfo;
-				 	
+
 					$.ajax({ url: "php/classes/ajax.php",
 						data: { jsonGetPmntInfo: output[i].paymentId },
 						type: 'post',
@@ -107,23 +115,23 @@ $('select[name="user"]').change(function(){
 							pmntInfo = pmnt;
 						}
 					});
-				 
+
 				 	var status = '<br><div class="label">Status</div><div class="input"><input type="radio" name="status" value="active"';
 				 	if(output[i].status == 'active'){ status += ' checked="true"'; }
 				 	status += '>Active';
 					status += '<input type="radio" name="status" value="inactive"';
 					if(output[i].status == 'inactive'){ status += ' checked="true"'; }
 					status += '>Inactive</div>';
-				 
+
 					var address = '<br><div class="label">Address</div><div class="input"><input type="text" name="addressOne" value="' + output[i].addressOne + '" />';
 					address += '<input type="text" name="addressTwo" value="' + output[i].addressTwo + '" />';
 					address += '<input type="text" name="city" value="' + output[i].city + '" />';
 					address += '<input type="text" name="state" value="' + output[i].state + '" />';
 					address += '<input type="text" name="zip" value="' + output[i].zip + '" /></div>';
-				 
+
 					proj += '<br><div><span class="title">' + output[i].title + ' (' + output[i].id + ')</span></div>';
 				 	proj += '<div style="width: 980px; overflow: auto;">';
-				 	
+
 				 	proj += '<form method="post" action="javascript:void(0)" class="userProject" id="proj'+output[i].id+'">';
 				 	proj += '	<div style="float: left; width: 650px;">';
 				 	proj += '		<input type="hidden" name="updateUserProject" value="' + output[i].id + '" />';
@@ -134,7 +142,7 @@ $('select[name="user"]').change(function(){
 				 	proj += '		<br><div class="label">Fax</div><div class="input"><input type="text" name="fax" value="' + output[i].fax + '" /></div>';
 				 	proj += '		<br><div class="label"></div><div class="input projectUpdateResponse"></div>';
 				 	proj += '	</div>';
-				 	
+
 				 	proj += '	<div style="float: right; width: 330px;">';
 				 	proj += '		Purchase Order<br>';
 				 	proj += '		<input type="text" name="purchaseOrder" value="'+pmntInfo.purchaseOrder+'" /><br>';
@@ -149,7 +157,7 @@ $('select[name="user"]').change(function(){
 				 	proj += '	</div>';
 				 	proj += '</form>';
 				 	proj += '</div>';
-				 	
+
 				 });
 				 $('div#user_projects span.content').html(proj);
 				 $('#user_projects').show();
@@ -158,7 +166,7 @@ $('select[name="user"]').change(function(){
 	}else{
 		$('#user_projects').hide();
 	}
-	
+
 	// Get this users bookings and create the forms to modify each one
 	if(user != ''){
 		$("input[name='userId']").val($(this).val());
@@ -173,7 +181,7 @@ $('select[name="user"]').change(function(){
 	         	 var name = '';
 	         	 var instrumentId = '';
 				 $.each(output, function(i) {
-				 	
+
 				 	$.ajax({
 					 	url: "php/classes/ajax.php",
 					 	data: { jsonGetInstrumentInfo: output[i].instrumentId },
@@ -184,59 +192,74 @@ $('select[name="user"]').change(function(){
 						 	instrumentId = instrument.id;
 					 	}
 				 	});
-				 	
+
+				 	var disabled="";
+				 	if(output[i].invoiced == 0){disabled="";}else{disabled="disabled";}
+
 				 	if(output[i].archiveStatus == 0){
-				 	
+
 					 	html += '<div class="active"><br>';
 					 	html += '	<span class="title">Booking #' + output[i].id + ' &nbsp; -- ' + name + ' (' + instrumentId + ') -- Project #' + output[i].projectId + '</span>';
 					 	html += '	<form method="post" action="javascript:void(0)" class="userBooking" id="b'+output[i].id+'">';
-					 	
+
 					 	html += '		<input type="hidden" name="updateUserBooking" value="' + output[i].id + '" />';
-					 	
-					 	html += '		<div class="label">Date</div><div class="input"><input type="date" name="dateFrom" value="' + output[i].dateFrom + '" /></div>';
-					 	html += '		-<div class="input"><input type="date" name="dateTo" value="' + output[i].dateTo + '" /></div>';
-					 	
-					 	html += '		<div class="label">Time</div><div class="input"><input type="time" name="timeFrom" value="' + output[i].timeFrom + '" /></div>';
-					 	html += '		-<div class="input"><input type="time" name="timeTo" value="' + output[i].timeTo + '" /></div>';
-					 	
+
+					 	html += '		<div class="label">Date</div>';
+					 	html += '		<div class="input"><input type="date" name="dateFrom" value="' + output[i].dateFrom + '" ' + disabled + ' /></div>';
+					 	html += '		-<div class="input"><input type="date" name="dateTo" value="' + output[i].dateTo + '" ' + disabled + ' /></div>';
+
+					 	html += '		<div class="label">Time</div><div class="input">';
+					 	html += '		<input type="time" name="timeFrom" value="' + output[i].timeFrom + '" ' + disabled + ' /></div>';
+					 	html += '		-<div class="input"><input type="time" name="timeTo" value="' + output[i].timeTo + '" ' + disabled + ' /></div>';
+
 					 	html += '			<div class="input"><input type="button" id="archiveTrigger" class="archiveBooking" value="Archive"/></div>';
-					 	html += '			<div class="input"><input type="button" class="cancel" id="' + output[i].id + '" value="Cancel"/></div>';
+
+					 	if(output[i].invoiced == 0){
+					 		html += '			<div class="input"><input type="button" class="cancel" id="' + output[i].id + '" value="Cancel"/></div>';
+					 	}
+
 					 	html += '			<div class="input" id="archiveResponse" style="width: 30px; text-align: right;"></div>';
-					 	
+
 					 	html += '			<div class="label updateBookingResponse" style="width: 30px; text-align: right;"></div>';
-					 						 	
+
 					 	html += '	</form>';
 					 	html += '</div>';
-					 	
+
 				 	}else{
-					 	
+
 					 	uhtml += '<div class="archived"><br>';
 					 	uhtml += '	<span class="title">' + name + '</span>';
 					 	uhtml += '	<form method="post" action="javascript:void(0)" class="userBooking" id="b'+output[i].id+'">';
-					 	
+
 					 	uhtml += '		<input type="hidden" name="updateUserBooking" value="' + output[i].id + '" />';
-					 	
-					 	uhtml += '		<div class="label">Date</div><div class="input"><input type="date" name="dateFrom" value="' + output[i].dateFrom + '" /></div>';
-					 	uhtml += '		-<div class="input"><input type="date" name="dateTo" value="' + output[i].dateTo + '" /></div>';
-					 	
-					 	uhtml += '		<div class="label">Time</div><div class="input"><input type="time" name="timeFrom" value="' + output[i].timeFrom + '" /></div>';
-					 	uhtml += '		-<div class="input"><input type="time" name="timeTo" value="' + output[i].timeTo + '" /></div>';
-					 	
+
+					 	uhtml += '		<div class="label">Date</div>';
+					 	uhtml += '		<div class="input"><input type="date" name="dateFrom" value="' + output[i].dateFrom + '" ' + disabled + ' /></div>';
+					 	uhtml += '		-<div class="input"><input type="date" name="dateTo" value="' + output[i].dateTo + '" ' + disabled + ' /></div>';
+
+					 	uhtml += '		<div class="label">Time</div>';
+					 	uhtml += '		<div class="input"><input type="time" name="timeFrom" value="' + output[i].timeFrom + '" ' + disabled + ' /></div>';
+					 	uhtml += '		-<div class="input"><input type="time" name="timeTo" value="' + output[i].timeTo + '" ' + disabled + ' /></div>';
+
 					 	uhtml += '			<div class="input"><input type="button" id="archiveTrigger" class="unArchiveBooking" value="Un-Archive"/></div>';
-					 	uhtml += '			<div class="input"><input type="button" class="cancel" id="' + output[i].id + '" value="Cancel"/></div>';
+
+						if(output[i].invoiced == 0){
+					 		uhtml += '			<div class="input"><input type="button" class="cancel" id="' + output[i].id + '" value="Cancel"/></div>';
+					 	}
+
 					 	uhtml += '			<div class="input" id="archiveResponse" style="width: 30px; text-align: right;"></div>';
-					 	
+
 					 	uhtml += '			<div class="label updateBookingResponse" style="width: 30px; text-align: right;"></div>';
-					 						 	
+
 					 	uhtml += '	</form>';
 					 	uhtml += '</div>';
-					 	
+
 				 	}
-				 	
-				 	
-				 			 	
-				 	
-				 	
+
+
+
+
+
 				 });
 				 $('div#user_bookings span.content').html(html + uhtml);
 				 $('#user_bookings').show();
@@ -245,86 +268,97 @@ $('select[name="user"]').change(function(){
 	}else{
 		$('#user_bookings').hide();
 	}
-		
+
 	// Get this users training sessions and create the forms to modify each one
 	if(user != ''){
 		$("input[name='userId']").val($(this).val());
-		$.ajax({ 
+		$.ajax({
 			url: "php/classes/ajax.php",
 			data: {
 				getUserTrainingBookings: $(this).val()
 			},
 			type: 'post',
 			success: function(output){
-			
+
 				var html = '';
-				
+
 				$.each(output, function(i) {
-		
+
+					var disabled="";
+				 	if(output[i].invoiced == 0){disabled="";}else{disabled="disabled";}
+
 					html += '<div class="active"><br>';
 					html += '	<span class="title">' + output[i].instrumentId + ' Training' + '</span>';
 					html += '	<form method="post" action="javascript:void(0)" class="userTrainingBooking" id="tb'+output[i].id+'">';
-					
+
 					html += '		<input type="hidden" name="updateUserTrainingBooking" value="' + output[i].id + '" />';
-					
-					html += '		<div class="label">Date</div><div class="input"><input type="date" name="dateFrom" value="' + output[i].dateFrom + '" /></div>';
-					html += '		-<div class="input"><input type="date" name="dateTo" value="' + output[i].dateTo + '" /></div>';
-					
-					html += '		<div class="label">Time</div><div class="input"><input type="time" name="timeFrom" value="' + output[i].timeFrom + '" /></div>';
-					html += '		-<div class="input"><input type="time" name="timeTo" value="' + output[i].timeTo + '" /></div>';
-					
-					html += '		<div class="input"><input type="button" class="cancel" id="' + output[i].id + '" value="Cancel"/></div>';
-					
+
+					html += '		<div class="label">Date</div>';
+					html += '		<div class="input"><input type="date" name="dateFrom" value="' + output[i].dateFrom + '" ' + disabled + ' /></div>';
+					html += '		-<div class="input"><input type="date" name="dateTo" value="' + output[i].dateTo + '" ' + disabled + ' /></div>';
+
+					html += '		<div class="label">Time</div>';
+					html += '		<div class="input"><input type="time" name="timeFrom" value="' + output[i].timeFrom + '" ' + disabled + ' /></div>';
+					html += '		-<div class="input"><input type="time" name="timeTo" value="' + output[i].timeTo + '" ' + disabled + ' /></div>';
+
+					if(output[i].invoiced == 0){
+						html += '		<div class="input"><input type="button" class="cancel" id="' + output[i].id + '" value="Cancel"/></div>';
+					}
+
 					html += '		<div class="label updateBookingResponse" style="width: 30px; text-align: right;"></div>';
-							 	
+
 					html += '	</form>';
 					html += '</div>';
-					
+
 					$('div#user_trainingBookings span.content').html(html);
 					$('#user_trainingBookings').show();
-		
+
 				});
 			}
 		});
 	}else{
 		$('#user_trainingBookings').hide();
 	}
-		
+
 	// Get this users service requests and create the forms to modify each one
 	if(user != ''){
 		$("input[name='userId']").val($(this).val());
-		$.ajax({ 
+		$.ajax({
 			 url: "php/classes/ajax.php",
 	         data: {
 	         	getServiceRequests: $(this).val()
 	         },
 	         type: 'post',
 	         success: function(output){
-	         
+
+	         	//console.log(output);
+
 	         	 var ffs = '';
-	         	 
+
 				 $.each(output, function(i) {
-				 	
-				 	var d = new Date(output[i].servicesSelected[0].createdAt);
+
+				 	//var d = new Date(output[i].servicesSelected[0].createdAt);
+				 	//console.log(output[i].servicesSelected[0].createdAt);
 				 	// for Safari/IE
-				 	var dd = output[i].servicesSelected[0].createdAt.split(" ")[0].split("-");
-				 	var displayDate = new Date(dd[0],dd[1],dd[2]);
+				 	//var dd = output[i].servicesSelected[0].createdAt.split(" ")[0].split("-");
+				 	//var displayDate = new Date(dd[0],dd[1],dd[2]);
 				 	//console.log(displayDate[0] + '-' + displayDate[1]-1 + '-' + displayDate[2]);
 				 	ffs += '<div class="serviceContainer">';
 				 	ffs += '<div style="height: 30px;">';
 				 	ffs += '<h3 style="float: left;">';
 				 	ffs += '	<span class="requestToggle" id="'+output[i].id+'">[+]</span>';
-				 	ffs += '	Request: ' + displayDate.getMonth() + '-' + displayDate.getDate() + '-' + displayDate.getFullYear();
+				 	//ffs += '	Request: ' + displayDate.getMonth() + '-' + displayDate.getDate() + '-' + displayDate.getFullYear();
+				 	ffs += '	Request: ' + output[i].createdAt;
 				 	ffs += '</h3>';
 				 	ffs += '<div  style="display: inline; float: right;" class="response" id="response'+output[i].id+'"></div>';
 				 	ffs += '</div>';
 				 	ffs += '<div class="request" id="'+output[i].id+'">';
-				 	
+
 				 	ffs += '<form method="post" action="javascript:void(0)" name="updateServiceRequest">';
 				 	ffs += '	<div style="height: 30px;width: ">';
-				 	
+
 				 	ffs += '		<div style="font-weight: bold; float: left;">Project ID: '+output[i].projectId+'</div>';
-				 	
+
 				 	ffs += '		<div style="display: inline; float: right;">';
 				 	ffs += '			<select name="status">';
 				 	ffs += '				<option value="pending" ';
@@ -341,17 +375,17 @@ $('select[name="user"]').change(function(){
 				 	ffs += '				Archived</option>';
 				 	ffs += '			</select>';
 				 	ffs += '		</div>';
-				 	
+
 				 	ffs += '	</div>';
 				 	ffs += '	<div class="ffs_left">';
 				 	ffs += '		<span class="label">Service ID:</span><input type="text" name="updateServiceRequest" value="'+output[i].id+'" readonly="true"/>';
 				 	ffs += '		<span class="label">Label:</span><input type="text" name="label" value="'+output[i].label+'" />';
 				 	ffs += '		<span class="label">Concentration:</span><input type="text" name="concentration" value="'+output[i].concentration+'" />';
 				 	ffs += '		<span class="label">State:</span><input type="text" name="state" value="'+output[i].state+'" />';
-				 	ffs += '		<span class="label">Composition:</span><input type="text" name="composition" value="'+output[i].composition+'" />';
+				 	ffs += '		<span class="label">Buffer Composition:</span><input type="text" name="composition" value="'+output[i].composition+'" />';
 				 	ffs += '		<span class="label">Digestion Enzyme:</span><input type="text" name="digestionEnzyme" value="'+output[i].digestionEnzyme+'" />';
 				 	ffs += '	</div>';
-				 	
+
 				 	ffs += '	<div class="ffs_right">';
 				 	ffs += '		<span class="label">Purification:</span><input type="text" name="purification" value="'+output[i].purification+'" />';
 				 	ffs += '		<span class="label">Reduction/Alkylation:</span><input type="text" name="redoxChemicals" value="'+output[i].redoxChemicals+'" />';
@@ -360,20 +394,20 @@ $('select[name="user"]').change(function(){
 				 	ffs += '		<span class="label">Amino Acid Mods:</span><input type="text" name="aaModifications" value="'+output[i].aaModifications+'" />';
 				 	ffs += '		<span class="label">Species:</span><input type="text" name="species" value="'+output[i].species+'" />';
 				 	ffs += '	</div>';
-				 	
+
 				 	ffs += '	<div>';
 				 	ffs += '		<span class="label">Sequence:</span><textarea name="sequence">'+output[i].sequence+'</textarea>';
 				 	ffs += '	</div>';
-				 	
+
 				 	ffs += '	<div>';
 				 	ffs += '		<span class="label">Comments:</span><textarea name="comments">'+output[i].comments+'</textarea>';
 				 	ffs += '	</div>';
-				 	
+
 				 	//ffs += '	<input type="submit" name="updateServiceRequest" value="Update"/>';
 				 	ffs += '</form>';
-				 	
-				 	
-			 		
+
+
+
 				 	ffs += '	<div class="ffs_Selected">';
 				 	ffs += '		<div class="labels">';
 				 	ffs += '			<div>Name</div>';
@@ -381,65 +415,72 @@ $('select[name="user"]').change(function(){
 				 	ffs += '			<div>Replicates</div>';
 				 	ffs += '			<div>Prep</div>';
 				 	ffs += '		</div>';
-					 	
+
 				 	$.each(output[i].servicesSelected, function(j) {
-	
+
+				 		var disabled="";
+				 		if(output[i].servicesSelected[j].invoiced == 0){disabled="";}else{disabled="disabled";}
+
 					 	ffs += '<div class="inputs">';
 					 	ffs += '	<form method="post" action="javascript:void(0)" name="updateSelectedService" >';
 
 					 	ffs += '		<input type="hidden" name="updateSelectedService" value="'+output[i].servicesSelected[j].id+'"/>';
 					 	ffs += '		<div>'+output[i].servicesSelected[j].serviceName+'</div>';
-					 	ffs += '		<div><input type="number" name="samples" value="'+output[i].servicesSelected[j].samples+'" /></div>';
-					 	
+					 	ffs += '		<div><input type="number" name="samples" value="'+output[i].servicesSelected[j].samples+'" '+disabled+' /></div>';
+
 					 	var r = output[i].servicesSelected[j].replicates;
 					 	ffs += '		<div>';
-					 	ffs += '		<select name="replicates">';
-					 	
+					 	ffs += '		<select name="replicates" '+disabled+'>';
+
 					 	ffs += '			<option value="1"';
 					 	if(r == 0){ ffs+='selected="true"'; }
 					 	ffs += '			>None</option>';
-					 	
+
 					 	ffs += '			<option value="2"';
 					 	if(r == 2){ ffs+='selected="true"'; }
 					 	ffs += '			>Duplicate</option>';
-					 	
+
 					 	ffs += '			<option value="3"';
 					 	if(r == 3){ ffs+='selected="true"'; }
 					 	ffs += '			>Triplicate</option>';
-					 	
+
 					 	ffs += '		</select>';
 					 	ffs += '		</div>';
-					 	
+
 					 	var p = output[i].servicesSelected[j].prep;
 					 	ffs += '		<div>';
-					 	ffs += '		<select name="prep">';
-					 	
+					 	ffs += '		<select name="prep" '+disabled+'>';
+
 					 	ffs += '			<option value="0"';
 					 	if(p == 0){ ffs+='selected="true"'; }
 					 	ffs += '			>No</option>';
-					 	
+
 					 	ffs += '			<option value="1"';
 					 	if(p == 1){ ffs+='selected="true"'; }
 					 	ffs += '			>Yes</option>';
-					 	
+
 					 	ffs += '		</select>';
-					 	
+
 					 	ffs += '		</div>';
-					 	ffs += '		<div id="delete">';
-					 	ffs += '<input style="line-height: 10px; text-align: center; border-radius: 1.6em; -webkit-appearance: none; border: solid 1px #ddd; padding: 0.5em; height: 30px; width: 30px; font-family: "Comic Sans MS", sans-serif; font-size: 12pt; font-weight: 400; color: #565656;" type="button" name="delete" id="'+output[i].servicesSelected[j].id+'" value="X"/>';
-					 	ffs += '		<span class="ServiceResponse"></span>';
-					 	ffs += '		</div>';
+
+					 	if(output[i].servicesSelected[j].invoiced == 0){
+						 	ffs += '		<div id="delete">';
+						 	ffs += '			<input style="line-height: 10px; text-align: center; border-radius: 1.6em; -webkit-appearance: none; border: solid 1px #ddd; padding: 0.5em; height: 30px; width: 30px; font-family: "Comic Sans MS", sans-serif; font-size: 12pt; font-weight: 400; color: #565656;" type="button" name="delete" id="'+output[i].servicesSelected[j].id+'" value="X"/>';
+						 	ffs += '			<span class="ServiceResponse"></span>';
+						 	ffs += '		</div>';
+						}
+
 					 	ffs += '	</form>';
 					 	ffs += '</div>';
-	
+
 				 	});
-				 	
+
 				 	ffs += '	</div>';
 				 	ffs += '	<input style="width: 90px;" type="button" class="call-modal" value="Add Service" id="'+output[i].id+'" >';
 				 	ffs += '</div>';
 				 	ffs += '</div>';
 				 });
-				 
+
 				 $('div#user_ffs div.content').html(ffs);
 				 $('#user_ffs').show();
 	         }
@@ -447,7 +488,7 @@ $('select[name="user"]').change(function(){
 	}else{
 		$('#user_ffs').hide();
 	}
-	
+
 });
 
 /*
@@ -462,7 +503,7 @@ $(document).on('change', '#updateUserAccountType', function(e){
 		type: 'post',
 		url: 'php/classes/ajax.php',
 		dataType: 'text',
-		data: 
+		data:
 		{
 			updateUserAccountType: $(this).find('input[name="id"]').val(),
 			accountType: $(this).find('select[name="accountType"]').val()
@@ -497,7 +538,7 @@ $(document).on('change', '.trainingStatus', function(e){
 		type: 'post',
 		url: 'php/classes/ajax.php',
 		dataType: 'text',
-		data: 
+		data:
 		{
 			updateTrainingStatus: $(this).find('input[name="moduleId"]').val(),
 			userId: $(this).find('input[name="userId"]').val(),
@@ -533,7 +574,7 @@ $(document).on('change', '.instrumentAccess', function(e){
 		type: 'post',
 		url: 'php/classes/ajax.php',
 		dataType: 'text',
-		data: 
+		data:
 		{
 			instrumentId: $(this).find('input[name="instrumentId"]').val(),
 			userId: $(this).find('input[name="userId"]').val(),
@@ -563,7 +604,7 @@ $(document).on('change', '.conferenceAccess', function(e){
 	{
 		type: 'post',
 		url: 'php/classes/ajax.php',
-		data: 
+		data:
 		{
 			conferenceId: $(this).find('input[name="conferenceId"]').val(),
 			userId: $(this).find('input[name="userId"]').val(),
@@ -600,7 +641,7 @@ $(document).on('change', ".userProject", function(e){
 		data: form.serialize(),
 		type: 'post',
 		success: function(response){
-			
+
 			var target = form.find('div.projectUpdateResponse');
 			var time = 0;
 			if(response == true){
@@ -611,10 +652,10 @@ $(document).on('change', ".userProject", function(e){
 				time = 10000;
 			}
 			setTimeout(function(){ target.html(''); },time);
-		    
+
 		},
 	});
-	
+
 });
 
 /*
@@ -626,26 +667,26 @@ $(document).on('change', ".userBooking", function(e){
 	e.preventDefault();
 	// Get the form so we can serialize it
 	var form = $(this);
+	setTimeout(function(){
+		$.ajax({ url: "php/classes/ajax.php",
+			data: form.serialize(),
+			type: 'post',
+			success: function(response){
 
-	$.ajax({ url: "php/classes/ajax.php",
-		data: form.serialize(),
-		type: 'post',
-		success: function(response){
-			
-			var target = form.find('div.updateBookingResponse');
-			var time = 0;
-			if(response == true){
-				target.html('<span style="color: green;">&#x2713;</span>');
-				time = 2000;
-			}else{
-				target.html('<span style="color: red;">&#x2717; ' + response + '</span>')
-				time = 10000;
-			}
-			setTimeout(function(){ target.html(''); },time);
-		    
-		},
-	});
-	
+				var target = form.find('div.updateBookingResponse');
+				var time = 0;
+				if(response == true){
+					target.html('<span style="color: green;">&#x2713;</span>');
+					time = 2000;
+				}else{
+					target.html('<span style="color: red;">&#x2717; ' + response + '</span>')
+					time = 10000;
+				}
+				setTimeout(function(){ target.html(''); },time);
+
+			},
+		});
+	}, 1000);
 });
 
 $(document).on('change', ".userTrainingBooking", function(e){
@@ -657,7 +698,7 @@ $(document).on('change', ".userTrainingBooking", function(e){
 		data: form.serialize(),
 		type: 'post',
 		success: function(response){
-			
+
 			var target = form.find('div.updateBookingResponse');
 			var time = 0;
 			if(response == true){
@@ -668,39 +709,64 @@ $(document).on('change', ".userTrainingBooking", function(e){
 				time = 10000;
 			}
 			setTimeout(function(){ target.html(''); },time);
-		    
+
 		},
 	});
-	
+
+});
+
+$(document).on('click', 'input#accountStatus', function(e){
+	if(e.target.value == "Disabled"){
+		var newStatus = 0;
+		var html = 'Account Status: <input style="height: 25px; padding: 0; background-color: #026502; color: white;" type="button" id="accountStatus" value="Enabled">';
+	}else{
+		var newStatus = 1;
+		var html = 'Account Status: <input style="height: 25px; padding: 0; background-color: #a30202; color: white;" type="button" id="accountStatus" value="Disabled">';
+	}
+
+	$.ajax({
+		url: "php/classes/ajax.php",
+		data: {updateUserAccountStatus: $('input[name="id"]').val(), status: newStatus},
+		type: 'POST',
+		dataType: 'text',
+		success: function(response){
+			if(response == true){
+				$('div#accountStatus.input').html(html);
+			}else{
+				alert("Failed to update account status.");
+			}
+		}
+	});
+
 });
 
 $(document).on('click', 'input.archiveBooking', function(e){
 	e.preventDefault();
 	var form = $(this).closest("form");
-	
+
 	if(confirm('Are you sure you want to archive this booking?')){
 		$.ajax({ url: "php/classes/ajax.php",
 			data: { archiveBooking: form.find('input[name="updateUserBooking"]').val() },
 			type: 'post',
 			success: function(response){
-				
+
 				if(response == true){
 					form.find('#archiveTrigger').val('Un-Archive');
 					form.find('#archiveTrigger').addClass('unArchiveBooking');
 					form.find('#archiveTrigger').removeClass('archiveBooking');
-					
+
 					form.find('#yes').addClass('unArchiveBookingYes');
 					form.find('#yes').removeClass('archiveBookingYes');
-					
+
 					form.find('#no').addClass('unArchiveBookingNo');
 					form.find('#no').removeClass('archiveBookingNo');
-					
+
 					form.parent().addClass('archived').removeClass('active');
-					
+
 					if($('input[name="showHideArchive"]').val() == "Show"){
 						form.parent().hide('slow');
 					}
-					
+
 					form.find('#ajaxResponse').css('color', 'green');
 					form.find('#ajaxResponse').html('&#x2713;');
 						setTimeout(function(){
@@ -713,11 +779,11 @@ $(document).on('click', 'input.archiveBooking', function(e){
 				        	form.find('#ajaxResponse').html('');
 				        },2000);
 			    }
-			    
+
 			},
 		});
 	}
-	
+
 });
 
 
@@ -731,27 +797,27 @@ $(document).on('click', 'input.archiveBooking', function(e){
 $(document).on('click', 'input.unArchiveBooking', function(e){
 	e.preventDefault();
 	var form = $(this).closest("form");
-	
-	if(confirm('Are you sure you want to un-archive this booking?')){	
-		$.ajax({ 
+
+	if(confirm('Are you sure you want to un-archive this booking?')){
+		$.ajax({
 			url: "php/classes/ajax.php",
 			data: { unArchiveBooking: form.find('input[name="updateUserBooking"]').val() },
 			type: 'post',
 			success: function(response){
-				
+
 				if(response == true){
 					form.find('#archiveTrigger').val('Archive');
 					form.find('#archiveTrigger').addClass('archiveBooking');
 					form.find('#archiveTrigger').removeClass('unArchiveBooking');
-					
+
 					form.find('#yes').addClass('archiveBookingYes');
 					form.find('#yes').removeClass('unArchiveBookingYes');
-					
+
 					form.find('#no').addClass('archiveBookingNo');
 					form.find('#no').removeClass('unArchiveBookingNo');
-					
+
 					form.parent().addClass('active').removeClass('archived').show();
-					
+
 					form.find('#ajaxResponse').css('color', 'green');
 					form.find('#ajaxResponse').html('&#x2713;');
 						setTimeout(function(){
@@ -764,11 +830,11 @@ $(document).on('click', 'input.unArchiveBooking', function(e){
 				        	form.find('#ajaxResponse').html('');
 				        },2000);
 			    }
-			    
+
 			},
 		});
 	}
-		
+
 });
 
 
@@ -833,13 +899,13 @@ $(document).on('change', 'form[name="updateSelectedService"]', function(){
 *
 */
 $(document).on('click', '.theBookings input.cancel', function(e){
-	
+
 	e.preventDefault();
 	var id = $(this).attr('id');
 	var form = $('form#b'+id);
-	
-	if(confirm('Are you sure you want to CANCEL this booking?')){	
-		$.ajax({ 
+
+	if(confirm('Are you sure you want to CANCEL this booking?')){
+		$.ajax({
 			url: "php/classes/ajax.php",
 			data: { cancelBooking: 'true', bookingId: id },
 			type: 'post',
@@ -847,22 +913,22 @@ $(document).on('click', '.theBookings input.cancel', function(e){
 			success: function(response){
 
 				if(response == 'success'){
-					
+
 					form.closest('div.active').remove();
-					
+
 			    }else{
 				    var target = form.find('.updateBookingResponse');
 					target.html('&#x2717;').css('color', 'red');
 					setTimeout(function(){ target.html(''); },10000);
 			    }
-			    
-			    
-			    
+
+
+
 			},
 		});
 	}
-	
-	
+
+
 });
 
 /*
@@ -871,13 +937,13 @@ $(document).on('click', '.theBookings input.cancel', function(e){
 *
 */
 $(document).on('click', '.theTrainingBookings input.cancel', function(e){
-	
+
 	e.preventDefault();
 	var id = $(this).attr('id');
 	var form = $('form#tb'+id);
-	
-	if(confirm('Are you sure you want to CANCEL this training session?')){	
-		$.ajax({ 
+
+	if(confirm('Are you sure you want to CANCEL this training session?')){
+		$.ajax({
 			url: "php/classes/ajax.php",
 			data: { cancelTrainingBooking: 'true', trainingId: id },
 			type: 'post',
@@ -885,21 +951,21 @@ $(document).on('click', '.theTrainingBookings input.cancel', function(e){
 			success: function(response){
 
 				if(response == true){
-					
+
 					form.closest('div.active').remove();
-					
+
 			    }else{
 				    var target = form.find('.updateBookingResponse');
 					target.html('&#x2717;').css('color', 'red');
 					setTimeout(function(){ target.html(''); },10000);
 			    }
-			    
-			    
-			    
+
+
+
 			},
 		});
 	}
-	
+
 });
 
 /*
@@ -914,7 +980,7 @@ $('.toggleAccess').click(function(){
 	}else{
 		$(this).text('[+]');
 	}
-	
+
 	$('.theAccess .content').toggle();
 });
 
@@ -925,7 +991,7 @@ $('.toggleConferenceAccess').click(function(){
 	}else{
 		$(this).text('[+]');
 	}
-	
+
 	$('.theConferenceAccess .content').toggle();
 });
 
@@ -941,7 +1007,7 @@ $('.toggleTrainingModules').click(function(){
 	}else{
 		$(this).text('[+]');
 	}
-	
+
 	$('.theTrainingModules .content').toggle();
 });
 
@@ -952,7 +1018,7 @@ $('.toggleTrainingBookings').click(function(){
 	}else{
 		$(this).text('[+]');
 	}
-	
+
 	$('.theTrainingBookings .content').toggle();
 });
 
@@ -968,7 +1034,7 @@ $('.toggleProjects').click(function(){
 	}else{
 		$(this).text('[+]');
 	}
-	
+
 	$('.theProjects .content').toggle();
 });
 
@@ -984,7 +1050,7 @@ $('.toggleBookings').click(function(){
 	}else{
 		$(this).text('[+]');
 	}
-	
+
 	$('.theBookings .content').toggle();
 });
 
@@ -994,14 +1060,14 @@ $('.toggleBookings').click(function(){
 *
 */
 $(document).on('click', 'span.requestToggle', function(){
-	
+
 	var id = $(this).attr('id');
 	if($(this).text() == '[+]'){
 		$(this).text('[-]');
 	}else{
 		$(this).text('[+]');
 	}
-	
+
 	$('div#'+id+'.request').toggle();
 });
 
@@ -1017,7 +1083,7 @@ $('.toggleFFS').click(function(){
 	}else{
 		$(this).text('[+]');
 	}
-	
+
 	$('.theServiceRequests .content').toggle();
 });
 
@@ -1032,11 +1098,11 @@ $(document).on('click', 'input[name="showHideArchive"]', function(){
 });
 
 function getAnalysisServices(){
-	
+
 	if(analysisServices != null){
 		return analysisSerivices;
 	}else{
-		$.ajax({ 
+		$.ajax({
 			url: "php/classes/ajax.php",
 			data: {
 				getAnalysisServices: true
@@ -1047,5 +1113,5 @@ function getAnalysisServices(){
 			}
 		});
 	}
-	
+
 }

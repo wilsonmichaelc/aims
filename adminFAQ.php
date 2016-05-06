@@ -28,7 +28,7 @@ if ($_SESSION['isAdmin'] == 0){
 	<head>
 		<title>Analytical Instrument Management System</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="Mass Spectrometry Center, Instrument Management, Mass Spec, Goodlett" />
+		<meta name="keywords" content="Analytical Instrument Management System, Mass Spec" />
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,700|Open+Sans+Condensed:300,700" rel="stylesheet" />
 
 		<noscript>
@@ -49,17 +49,17 @@ if ($_SESSION['isAdmin'] == 0){
 
 			<!-- Content -->
 			<div id="content">
-			
+
 				<!-- Inner Content -->
 				<div id="content-inner">
-			
+
 						<!-- Post -->
 						<article class="is-post is-post-excerpt">
 
 							<!-- Inner Menu -->
 							<div class="info menu">
 								<span class="date">
-									<span class="fa fa-bar-chart-o"></span> 
+									<span class="fa fa-bar-chart-o"></span>
 								</span>
 								<ul class="stats">
 									<li><a href="adminStats.php">Stats</a></li>
@@ -70,6 +70,9 @@ if ($_SESSION['isAdmin'] == 0){
 									<li><a href="adminTraining.php">Training</a></li>
 									<li class="current-page-start"><a href="adminFAQ.php">FAQ</a></li>
 									<li><a href="adminAccountTypes.php">Accounts</a></li>
+									<li><a href="adminBookingRates.php">Rates</a></li>
+									<li><a href="adminInstrumentAccess.php">Access</a></li>
+									<li><a href="adminInvoiceSearch.php">Invoice-Search</a></li>
 								</ul>
 							</div>
 							<!-- /Inner Menu -->
@@ -77,7 +80,7 @@ if ($_SESSION['isAdmin'] == 0){
 							<header>
 								<span class="byline">Frequently Asked Questions</span>
 								<span class="byline">
-									<?php 
+									<?php
 										// show negative messages
 										if ($faq->errors) { foreach ($faq->errors as $error) { echo '<div class="error">' . $error . '</div>'; } }
 										// show positive messages
@@ -85,7 +88,7 @@ if ($_SESSION['isAdmin'] == 0){
 									?>
 								</span>
 							</header>
-				            
+
 							<div>
 								<div><b>New FAQ</b></div>
 								<form method="post" action="adminFAQ.php" name="newFaq">
@@ -94,7 +97,7 @@ if ($_SESSION['isAdmin'] == 0){
 									<input type="text" name="answer" placeholder="Answer..." required/>
 									<input type="submit" name="newFaq" value="Submit" />
 								</form>
-								
+
 								<div><b>Edit FAQ's</b></div>
 								<?php $faqs = $faq->getFaqs(); foreach($faqs as $f): ?>
 									<form method="post" action="javascript:void(0)" class="updateFaq" id="<?php echo $f['id']; ?>">
@@ -112,25 +115,25 @@ if ($_SESSION['isAdmin'] == 0){
 									</form>
 								<?php endforeach; ?>
 							</div>
-							
+
 						</article>
 						<!-- End Post -->
 
 				</div>
 				<!-- /Inner Content -->
-				
+
 			</div>
 			<!-- /Content -->
-				
+
 			<!-- Sidebar -->
 			<div id="sidebar">
-			
+
 				<!-- Logo -->
 				<div id="logo">
 					<h1>AIMS</h1>
 				</div>
 				<!-- /Logo -->
-		
+
 				<!-- Logout -->
 				<section>
 					<div class="inner">
@@ -139,7 +142,7 @@ if ($_SESSION['isAdmin'] == 0){
 					</div>
 				</section>
 				<!-- /Logout -->
-				
+
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
@@ -158,7 +161,7 @@ if ($_SESSION['isAdmin'] == 0){
 				<!-- Search -->
 					<?php include("php/includes/search.php"); ?>
 				<!-- /Search -->
-		
+
 				<!-- Text -->
 				<section class="is-text-style1">
 					<div class="inner">
@@ -172,7 +175,7 @@ if ($_SESSION['isAdmin'] == 0){
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>
@@ -183,7 +186,7 @@ if ($_SESSION['isAdmin'] == 0){
 
 		</div>
 		<!-- /Wrapper -->
-		
+
 		<!-- Scripts -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/skel.min.js"></script>

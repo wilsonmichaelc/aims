@@ -13,13 +13,21 @@ function myClick(){
 		
 	var selectedDate = new Date($(this).attr('data-date'));
 	selectedDate.setDate(selectedDate.getDate() + 1);
-	//console.log('Selected: ' + selectedDate);
-	
 	var currentDate = new Date();
+
+	//console.log('Selected: ' + selectedDate);
 	//console.log('Current: ' + currentDate);
 	
-	//console.log(selectedDate >= currentDate);
-		
+	if(selectedDate.getMonth() == currentDate.getMonth() && selectedDate.getDay() == currentDate.getDay() && selectedDate.getFullYear() == currentDate.getFullYear()){
+		//console.log("Today was selected, make sure the times match so we can handle booking only for future times");
+		selectedDate.setHours(currentDate.getHours());
+		selectedDate.setMinutes(currentDate.getMinutes());
+		selectedDate.setSeconds(currentDate.getSeconds());
+		selectedDate.setMilliseconds(currentDate.getMilliseconds());
+		//console.log('Update Selected Date: ' + selectedDate);
+	}
+
+
 	if(selectedDate >= currentDate){
 		$('input[name="dateFrom"], input[name="dateTo"]').val(selectedDate.toString('M/d/yyyy'));
 		$('a#showModal')[0].click();

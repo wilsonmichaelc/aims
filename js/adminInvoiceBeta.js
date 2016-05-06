@@ -99,7 +99,7 @@ $(document).on('change',  'select[name="projectId"]',  function(){
 				var bookingInfo = '';
 				
 				if(json.bookings.length > 0){
-					bookingInfo += '<b>Bookings</b><div class="bookingHeader"><span id="check"></span><span id="bid">ID</span><span id="inst">Instrument</span><span id="from">From</span><span id="to">To</span><span id="hrs">Hours</span></div>';
+					bookingInfo += '<b>Bookings </b><span style="font-size: 12px; font-weight: bold;"> (You cannot mix high and low accuracy instruments on the same invoice.)</span><div class="bookingHeader"><span id="check"></span><span id="bid">ID</span><span id="inst">Instrument</span><span id="from">From</span><span id="to">To</span><span id="hrs">Hours</span></div>';
 				}
 				
 				$(json.bookings).each(function(idx, obj){
@@ -126,9 +126,14 @@ $(document).on('change',  'select[name="projectId"]',  function(){
 				
 					// Create a div w/ class bookingInfo for each booking
 					bookingInfo += '<div class="bookingInfo">';
-					bookingInfo += '<span id="check"><input type="checkbox" name="booking" value="' + obj.id + '"></span>';
+					bookingInfo += '<span id="check"><input type="checkbox" name="booking" value="' + obj.id + '" accuracy="' + obj.accuracy + '"></span>';
 					bookingInfo += '<span id="bid">' + obj.id + '</span>';
-					bookingInfo += '<span id="inst" style="color: ' + obj.color + ';">' + obj.name + '</span>';
+					bookingInfo += '<span id="inst" style="color: ' + obj.color + ';">' + obj.name;
+					if(obj.accuracy == 'high'){
+						bookingInfo +=  '(H)</span>';
+					}else{
+						bookingInfo += '(L)</span>';
+					}
 					bookingInfo += '<span id="from">' + obj.dateFrom + '@' + obj.timeFrom  + '</span>';
 					bookingInfo += '<span id="to">' + obj.dateTo + '@' + obj.timeTo + '</span>';
 					bookingInfo += '<span id="hrs">' + hours + '</span>';					
@@ -151,19 +156,22 @@ $(document).on('change',  'select[name="projectId"]',  function(){
 					serviceInfo += '<b>Service Requests</b><div class="serviceHeader"><span id="check"></span><span id="sid">ID</span><span id="rid">Request</span><span id="name">Service</span><span id="samples">Samples</span><span id="replicates">Replicates</span><span id="prep">Prep</span></div>';
 				}
 				
-				$(json.requests).each(function(idx, obj){
-					
-					serviceInfo += '<div class="serviceInfo">';
-					serviceInfo += '<span id="check"><input type="checkbox" name="service" value="' + obj.id + '" /></span>';
-					serviceInfo += '<span id="sid">' + obj.id + '</span>';
-					serviceInfo += '<span id="rid">' + obj.requestId + '</span>';
-					serviceInfo += '<span id="name">' + obj.name + '</span>';
-					serviceInfo += '<span id="samples">' + obj.samples + '</span>';
-					serviceInfo += '<span id="replicates">' + obj.replicates + '</span>';
-					serviceInfo += '<span id="prep">' + obj.prep + '</span>';
-					serviceInfo += '</div>';
-					
-				});
+				for(var i=0; i<json.requests.length; i++){
+					for(var j=0; j<json.requests[i].length; j++){
+						
+						//console.log(json.requests[i][j]);
+						serviceInfo += '<div class="serviceInfo">';
+						serviceInfo += '<span id="check"><input type="checkbox" name="service" value="' + json.requests[i][j].id + '" /></span>';
+						serviceInfo += '<span id="sid">' + json.requests[i][j].id + '</span>';
+						serviceInfo += '<span id="rid">' + json.requests[i][j].requestId + '</span>';
+						serviceInfo += '<span id="name">' + json.requests[i][j].name + '</span>';
+						serviceInfo += '<span id="samples">' + json.requests[i][j].samples + '</span>';
+						serviceInfo += '<span id="replicates">' + json.requests[i][j].replicates + '</span>';
+						serviceInfo += '<span id="prep">' + json.requests[i][j].prep + '</span>';
+						serviceInfo += '</div>';
+						
+					}	
+				}
 				
 				$('div.requests').append(serviceInfo);
 				
@@ -248,3 +256,128 @@ $(document).on('change', 'select[name="userId"]',  function(){
 	}
 
 });
+
+$(document).on('click', 'input[name="createInvoice"]', function(){
+	
+	var userId = $('select[name="userId"] option:selected').val();					// Get the user ID
+	var projectId = $('select[name="projectId"] option:selected').val();			// Get the project ID
+		
+	var allData = {};																// Create an object to hold all this data
+	
+	allData.userId = userId;														// Store the user ID
+	allData.projectId = projectId;													// Store the project ID
+	
+	/*
+	 *	Bookings
+	 */
+	var selectedBookings = []; 														// Create an array to hold the selected bookings
+	$("div.bookingInfo").each(function(index){										// Iterate over the bookings.
+		if($(this).find('span#check input').is(':checked')){						// If the booking has been selected,
+			selectedBookings.push($(this).find('span#check input').val());			// add its ID to the list
+		}
+	});
+	allData.bookings = selectedBookings;											// Add the list of booking to the json object for processing
+
+	
+	/*
+	 *	Servcice Requests
+	 */
+	var selectedServiceRequests = [];												// Create an array to hold the selected service requests
+	$("div.serviceInfo").each(function(index){										// Iterate over the service requests.
+		if($(this).find('span#check input').is(':checked')){						// If the service requests has been selected,
+			selectedServiceRequests.push($(this).find('span#check input').val());	// add its ID to the list
+		}
+	});
+	allData.serviceRequests = selectedServiceRequests;								// Add the list of booking to the json object for processing
+	
+	/*
+	 *	Training
+	 */
+	var selectedTraining = [];														// Create an array to hold the selected training
+	$("div.trainingInfo").each(function(index){										// Iterate over the trainings.
+		if($(this).find('span#check input').is(':checked')){						// If the training has been selected,
+			selectedTraining.push($(this).find('span#check input').val());			// add its ID to the list
+		}
+	});
+	allData.trainings = selectedTraining;											// Add the list of booking to the json object for processing
+	
+	if(allData.bookings.length > 0 || allData.serviceRequests.length > 0 || allData.trainings.length > 0){
+		$.ajax({
+			type: 'post',
+			url: 'php/classes/ajaxAdminInvoiceBeta.php',
+			dataType: 'json',
+			async: false,
+			data:
+			{
+				generateInvoice: JSON.stringify(allData)
+			},
+			success: function(response){
+				if(response){
+					
+					$("div.bookingInfo").each(function(index){										// Iterate over the service requests.
+						if($(this).find('span#check input').is(':checked')){						// If the service requests has been selected,
+							$(this).closest('.bookingInfo').remove();
+						}
+					});
+					$("div.serviceInfo").each(function(index){										// Iterate over the service requests.
+						if($(this).find('span#check input').is(':checked')){						// If the service requests has been selected,
+							$(this).closest('.serviceInfo').remove();
+						}
+					});
+					$("div.trainingInfo").each(function(index){										// Iterate over the service requests.
+						if($(this).find('span#check input').is(':checked')){						// If the service requests has been selected,
+							$(this).closest('.trainingInfo').remove();
+						}
+					});
+				
+					window.location.href = "tmp/invoice.xls";
+				}else{
+					alert('Excel file was not generated.');
+				}
+			}
+		});
+	}else{
+		alert('You must select at least one service to generate an invoice.');
+	}
+	
+});
+
+var currentClass = "";
+
+$(document).on('change', 'input[name="booking"]',  function(){
+
+	// Is this item being checked?
+	if(this.checked){
+		// Get the recently selected class
+		var instrumentClass = $(this).attr("accuracy");
+
+		// If the class type is not set, set it.
+		if(currentClass == ""){
+			currentClass = instrumentClass;
+		}else{
+			// If the class type doesnt match what was just selected, uncheck the recently selected item.
+			if(instrumentClass != currentClass){
+				$(this).attr('checked', false);
+			}
+		}
+	}else{
+
+	}
+	
+
+	// If there are not items selected, reset the class type.
+	var count = 0;
+	$( 'div.bookings input[name="booking"]' ).each(function( idx ) {
+		if(this.checked){
+			count++;
+		}
+	});
+	//console.log(count);
+	if(count == 0){
+		currentClass = "";
+	}
+
+});
+
+
+

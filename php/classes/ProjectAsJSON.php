@@ -36,7 +36,7 @@ class ProjectAsJSON
 		    $query = $this->db_connection->prepare('
 		    	SELECT instrumentBookings.id, instrumentBookings.userId, instrumentBookings.projectId, instrumentBookings.instrumentId, instrumentBookings.dateFrom, instrumentBookings.dateTo, 
 		    	instrumentBookings.timeFrom, instrumentBookings.timeTo, instrumentBookings.archiveStatus, 
-		    	mscInstruments.name, mscInstruments.color
+		    	mscInstruments.name, mscInstruments.color, mscInstruments.accuracy
 		    	FROM instrumentBookings
 		    	INNER JOIN mscInstruments
 		    	ON instrumentBookings.instrumentId=mscInstruments.id
@@ -65,8 +65,12 @@ class ProjectAsJSON
 				$query->bindValue(':id', $s['id'], PDO::PARAM_INT);
 				$query->bindValue(':zero', 0, PDO::PARAM_INT);
 				$query->execute();
-				$result = $query->fetch(PDO::FETCH_ASSOC);
+				$result = $query->fetchAll(PDO::FETCH_ASSOC);
 				if($result != false){
+					//array_push($servicesSelected, $result);
+					//foreach($result as $r){
+					//	array_push($servicesSelected, $result[$r]);
+					//}
 					$servicesSelected[] = $result;
 				}
 			}

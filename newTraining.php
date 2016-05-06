@@ -39,10 +39,13 @@ if ($login->isUserLoggedIn() == false) {
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-desktop.css" />
 			<link rel="stylesheet" href="css/style-wide.css" />
+			
 		</noscript>
 		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
 		<!--[if lte IE 7]><link rel="stylesheet" href="css/ie7.css" /><![endif]-->
+
+		<link rel="stylesheet" href="css/newTraining.css" />
 	</head>
 
 	<body class="left-sidebar menu">
@@ -192,7 +195,7 @@ if ($login->isUserLoggedIn() == false) {
 															</form>
 															<p></p>
 														<?php else: ?>
-															<div>This module does not appear to have a quiz yet...</div>
+															<div>This module does not appear to have a quiz.</div>
 														<?php endif; ?>
 													<?php endif; ?>
 													
@@ -204,16 +207,31 @@ if ($login->isUserLoggedIn() == false) {
 											<!-- Hands on training-->
 												<?php $trainingRequest = $trainingInfo->getTrainingRequest($module['id'], $_SESSION['id']); ?>
 												<span id="id<?php echo $module['id']; ?>" class="training hidden column-container-wide">
-													<p>
-													<?php if(!$trainingModules->hasPassedQuiz($_SESSION['id'], $module['id'])): ?>
+													<div>
+													<?php if(!$trainingModules->hasPassedQuiz($_SESSION['id'], $module['id']) && (count($questions) > 0)): ?>
 														Please complete the quiz first.
 													<?php elseif( !empty($trainingRequest) ): ?>
-														Training requested on: <?php echo $trainingRequest['createdAt']; ?>
-														<?php if( !empty($trainingRequest['bookingId']) ): ?>
-															<?php $booking = $trainingInfo->getBooking($trainingRequest['bookingId']); ?>
-															<br />Scheduled for: <?php echo $booking['dateFrom'] . ' ' . $booking['timeFrom'] . '  -  ' . $booking['dateTo'] . ' ' . $booking['timeTo']; ?>
-														<?php endif; ?>
-													<?php else: ?>
+														<?php foreach($trainingRequest as $tReq): ?>
+														
+															<b>Requested:</b> <?php echo $tReq['createdAt']; ?>
+															<?php if( !empty($tReq['bookingId']) ): ?>
+																<?php $booking = $trainingInfo->getBooking($tReq['bookingId']); ?>
+																<b>&nbsp;&nbsp;-&nbsp;&nbsp;Scheduled:</b> <?php echo $booking['dateFrom'] . ' ' . $booking['timeFrom'] . '  -  ' . $booking['dateTo'] . ' ' . $booking['timeTo']; ?>
+															<?php else: ?>
+																<b>&nbsp;&nbsp;-&nbsp;&nbsp;Scheduled:</b>
+																<span>Pending...
+																	<form method="post" action="newTraining.php" class="cancelTrainingForm">
+																		<input type="hidden" name="userId" value="<?php echo $_SESSION['id']; ?>" />
+																		<input type="hidden" name="trainingId" value="<?php echo $tReq['id']; ?>" />
+																		<input class="cancelTraining" type="submit" name="cancelTraining" value="Cancel" />
+																	</form>
+																</span>
+															<?php endif; ?>
+															
+														<?php endforeach; ?>
+													<?php endif; ?>
+													
+													<?php if($trainingModules->hasPassedQuiz($_SESSION['id'], $module['id']) || (count($questions) == 0) ): ?>
 														<form method="post" action="newTraining.php">
 															<input type="hidden" name="moduleId" value="<?php echo $module['id']; ?>" />
 															<input type="hidden" name="userId" value="<?php echo $_SESSION['id']; ?>" />
@@ -227,14 +245,15 @@ if ($login->isUserLoggedIn() == false) {
 															<input style="width: 130px;" type="submit" name="requestTraining" value="Request Training" />
 														</form>
 													<?php endif; ?>
-													</p>
+													</div>
 												</span>
 												
 											<!-- /Hands on training-->
 											
 										</div>
+										<br>
 									<?php endforeach; ?>
-								
+
 								<!-- /Modules -->
 								
 							</div>
@@ -299,7 +318,7 @@ if ($login->isUserLoggedIn() == false) {
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>
@@ -351,6 +370,10 @@ if ($login->isUserLoggedIn() == false) {
 				});
 			});
 			
+			$(document).on('click', '.cancelTraining', function(){
+				var userId = $('input[name="userId"]').val();
+				
+			});
 		</script>
 		<!-- /Scripts -->
 

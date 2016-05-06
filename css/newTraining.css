@@ -1,0 +1,17 @@
+form.cancelTrainingForm{
+	display: inline !important;
+	width: 90px !important;
+}
+
+input.cancelTraining{
+	padding: 0.1em !important;
+	width: 90px !important;
+}
+
+input.cancelTraining:hover{
+	background-color: #d95673;
+}
+
+input.cancelTraining:active{
+	background-color: #b93653;
+}

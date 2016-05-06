@@ -21,6 +21,17 @@ class TrainingModules
 			);
 
         }
+
+        if (isset($_POST['cancelTraining'])) {
+
+        	if($_POST['userId'] == $_SESSION['id']){
+        		$this->cancelTrainingRequest(
+        			$_POST['trainingId'],
+        			$_POST['userId']
+        		);
+        	}
+
+        }
     }
 
     /**
@@ -189,12 +200,29 @@ class TrainingModules
 	        $query->bindValue(':projectId', $projectId, PDO::PARAM_INT);
 			if($query->execute()){
 				$this->sendNewTrainingEmail($userId, $moduleId);
-			    header("Location: " . $_SERVER['REQUEST_URI'] . '?trainingrequested');
+			    header("Location: " . $_SERVER['REQUEST_URI'] . '?trainingRequested');
 		    }else{
 			    $this->errors[] = "Something went wrong when we tried to submit your training request.";
 		    }
         }
         
+    }
+
+    private function cancelTrainingRequest($trainingId, $userId){
+
+    	if ($this->databaseConnection()) {
+
+    		$query = $this->db_connection->prepare('DELETE FROM mscTrainingRequest WHERE id=:trainingId AND userId=:userId');
+	        $query->bindValue(':trainingId', $trainingId, PDO::PARAM_INT);
+	        $query->bindValue(':userId', $userId, PDO::PARAM_INT);
+			if($query->execute()){
+			    header("Location: " . $_SERVER['REQUEST_URI'] . '?trainingCanceled');
+		    }else{
+			    $this->errors[] = "Something went wrong when we tried to cancel your training request.";
+		    }
+
+    	}
+
     }
     
     private function sendNewTrainingEmail($userId, $moduleId)

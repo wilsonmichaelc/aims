@@ -6,7 +6,7 @@ session_start();
 
 require_once("../config/config.php");
 require_once("ProjectAsJSON.php");
-require_once("GenerateInvoice.php");
+require_once("GenerateInvoice/GenerateInvoice.php");
 
 $project = new ProjectAsJSON();
 $invoice = new GenerateInvoice();

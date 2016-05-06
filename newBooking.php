@@ -1,7 +1,7 @@
 <?php
 	error_reporting(E_ALL);
 	ini_set('display_errors', 'on');
-	
+
 	require_once("php/config/config.php");
 	require_once("php/classes/Login.php");
 	require_once("php/classes/NewBooking.php");
@@ -10,11 +10,11 @@
 	require_once("php/classes/ConferenceRoomInfo.php");
 	require_once("php/classes/MetaData.php");
 	require_once("php/classes/TrainingInfo.php");
-	
+
 	$login = new Login();
-	
+
 	date_default_timezone_set('America/New_York');
-	
+
 	// ... ask if we are logged in here:
 	if ($login->isUserLoggedIn() == false) {
 	    header('Location: login.php');
@@ -43,40 +43,43 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="keywords" content="Mass Spectrometry Center, Instrument Management, Mass Spec, Goodlett" />
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,700|Open+Sans+Condensed:300,700" rel="stylesheet" />
-		
+
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-desktop.css" />
 			<link rel="stylesheet" href="css/style-wide.css" />
 		</noscript>
-		
+
 		<link rel="stylesheet" href="fullcalendar/fullcalendar.css" />
 		<link rel="stylesheet" media="print" href="fullcalendar/fullcalendar.print.css" />
 		<link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css"/>
 		<link rel="stylesheet" href="css/modal.css">
-		
+
 		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
 		<!--[if lte IE 7]><link rel="stylesheet" href="css/ie7.css" /><![endif]-->
+
 	</head>
 
 	<body class="left-sidebar menu">
+
+		<div id="oldBrowserWarning" style="display: none; vertical-align: middle; background-color: #c94663; background-image: url('css/images/bg1.png'); width: 100%; height: 30px; color: white; font-size: 30px; text-align: center;">Your browser is not supported. Please use <a style="color: white;" href="https://www.google.com/chrome/">Chrome</a> or <a style="color: white;" href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a></div>
 
 		<!-- Wrapper -->
 		<div id="wrapper">
 
 			<!-- Content -->
 			<div id="content">
-			
+
 				<!-- Inner Content -->
 				<div id="content-inner">
-			
+
 						<!-- Post -->
 						<article class="is-post is-post-excerpt">
 
 							<!-- Inner Menu -->
-							<div class="info menu">
+							<div class="info menu" style="overflow: visible">
 								<span class="date">
 									<span class="fa fa-calendar"></span>
 								</span>
@@ -85,20 +88,22 @@
 									<li><a href="newService.php">Services</a></li>
 									<li><a href="newTraining.php">Training</a></li>
 									<li class="current-page-start"><a href="newBooking.php">Bookings</a></li>
-									<br>
+								</ul>
+								<br>
+								<ul style="overflow: visible; width: 135px; margin-left: 0px; margin-right: 0px;">
 									<?php foreach($instruments as $instrument): ?>
-									<li style="font-size: .8em; width: 150px; overflow: visible; color: <?php echo $instrument['color']; ?>"><?php echo $instrument['name']; ?></li>
+									<li style="font-size: .8em; color: <?php echo $instrument['color']; ?>"><?php echo $instrument['name']; ?></li>
 									<?php endforeach; ?>
 								</ul>
 							</div>
-							
-								
+
+
 							<!-- /Inner Menu -->
-							
+
 							<header>
 								<h2><a id="showModal" href="#modal-text" class="call-modal" title="Clicking this link shows the modal">Book an Instrument</a></h2>
 								<span class="byline">
-									<?php 
+									<?php
 										// show negative messages
 										if ($newBooking->errors) { foreach ($newBooking->errors as $error) { echo '<div class="error">' . $error . '</div>'; } }
 										// show positive messages
@@ -106,27 +111,27 @@
 									?>
 								</span>
 							</header>
-							
+
 							<!-- Page Content -->
 							<div class="page-content-min-height">
-							
+
 								<div id='calendar'></div>
 
 								<!-- New Booking Form -->
 								<section class="semantic-content" id="modal-text" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">
-									
+
 									<div class="modal-inner">
-									
+
 										<form method="POST" action="newBooking.php" accept-charset="UTF-8" id="newBooking">
-											
+
 											Instrument
 											<select name="instrumentId" required>
 												<option value=""></option>
-												
+
 												<?php foreach($instruments as $instrument): ?>
 														<option value="i<?php echo $instrument['id']; ?>" minUnit="<?php echo $instrument['minBookableUnit']; ?>"><span style="background-color: <?php echo $instrument['color']; ?>;"><?php echo $instrument['name']; ?></span></option>
 												<?php endforeach; ?>
-												
+
 												<?php $rooms = $conferenceRoomInfo->getUsersBookableConferenceRooms($_SESSION['id']); ?>
 												<?php foreach($rooms as $room): ?>
 														<option value="c<?php echo $room['id']; ?>"><?php echo $room['name']; ?></option>
@@ -149,11 +154,11 @@
 													<?php endforeach; ?>
 												</select>
 											</span>
-											
+
 											<span id="trainingId-showHide" style="display: none;">
 												Training
 												<select name="trainingId" >
-													
+
 													<?php if(sizeof($training) > 0): ?>
 														<?php foreach($training as $t): ?>
 															<option value="<?php echo $t['id'] . '-' . $t['userId']; ?>">
@@ -169,13 +174,13 @@
 													<?php endif; ?>
 												</select>
 											</span>
-											
+
 											Date
 											<br>
 											<input style="height: 36px; width: 95px; float: left;" type="text" name="dateFrom" class="datepicker" id="dateFrom" required>
 											<span style="height: 36px; width: 10px; float: left; text-align: center;">&nbsp;-</span>
 											<input style="height: 36px; width: 95px; float: right;" type="text" name="dateTo" class="datepicker" id="dateTo" required>
-										
+
 											Time
 											<br>
 											<select style="height: 36px; width: 95px; float: left;" name="timeFrom" id="startTime" required>
@@ -185,50 +190,51 @@
 											<select  style="height: 36px; width: 95px; float: right;" name="timeTo" id="endTime" required>
 												<option value=""></option>
 											</select>
-											
+
 											<br>
 											Hours
-											<input id="hours" type="text" disabled="true"/>
-										
-											<span id="estimate-showHide">
+											<input name="hours" id="hours" type="text" readonly="true"/>
+
+											<span id="estimate-showHide" style="display: none;"><!-- Add: style="display: none;"  to remove estimate from booking form  -->
 												Estimate
-												<input id="estimate" type="text" disabled="true"/>
+												<input name="estimate" id="estimate" type="text" readonly="true"/>
+												<input type="hidden" id="postEstimate" name="postEstimate" value="" />
 											</span>
 											<input id="accountType" type="hidden" value="<?php echo $_SESSION['accountType']; ?>"/>
-											
+
 											<input type="submit" name="createBooking" value="Submit">
-										
+
 										</form>
-									
+
 									</div>
-									
+
 									<!-- Use Hash-Bang to maintain scroll position when closing modal -->
 									<a href="#!" class="modal-close" title="Close this modal" data-dismiss="modal">x</a>
-									
+
 								</section><!-- / New Booking Form-->
-							
+
 							</div>
 							<!-- End Page Content -->
-							
-							
+
+
 						</article>
 						<!-- End Post -->
 
 				</div>
 				<!-- /Inner Content -->
-				
+
 			</div>
 			<!-- /Content -->
-				
+
 			<!-- Sidebar -->
 			<div id="sidebar">
-			
+
 				<!-- Logo -->
 				<div id="logo">
 					<h1>AIMS</h1>
 				</div>
 				<!-- /Logo -->
-		
+
 				<!-- Logout -->
 				<section>
 					<div class="inner">
@@ -237,7 +243,7 @@
 					</div>
 				</section>
 				<!-- /Logout -->
-				
+
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
@@ -256,7 +262,7 @@
 				<!-- Search -->
 					<?php include("php/includes/search.php"); ?>
 				<!-- /Search -->
-		
+
 				<!-- Text -->
 				<section class="is-text-style1">
 					<div class="inner">
@@ -270,7 +276,7 @@
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>
@@ -281,14 +287,14 @@
 
 		</div>
 		<!-- /Wrapper -->
-		
+
 		<!-- Scripts -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
-		
+
 		<script src="js/date.js"></script>
 		<script src="fullcalendar/fullcalendar.js"></script>
 		<script src="fullcalendar/interactions.js"></script>
@@ -297,6 +303,18 @@
 			$(document).ready().delay(20).queue( function(fullCalendar){$('#calendar').fullCalendar('render');} );
 		</script>
 		<script src="js/bookings.js"></script>
+
+		<script>
+			var ua = window.navigator.userAgent;
+	        var msie = ua.indexOf("MSIE ");
+
+	        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)){      // If Internet Explorer, return version number
+	            var ieversion = parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)));
+	            if(ieversion <= 8){
+		            $("#oldBrowserWarning").show();
+	            }
+	        }
+		</script>
 		<!-- /Scripts -->
 
 	</body>

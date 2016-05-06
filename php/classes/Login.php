@@ -3,7 +3,7 @@
 /**
  * class Login
  * handles the user login/logout/session
- * 
+ *
  * @author Panique <panique@web.de>
  */
 class Login
@@ -39,17 +39,17 @@ class Login
     public $errors = array();
     /** @var array $messages Collection of success / neutral messages */
     public $messages = array();
-    
+
     private $isAdmin = false;
 
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
      * you know, when you do "$login = new Login();"
-     */    
+     */
     public function __construct()
     {
         // create/read session
-        session_start();                                        
+        session_start();
 
         // check the possible login actions:
         // 1. logout (happen when user clicks logout button)
@@ -109,24 +109,24 @@ class Login
             $this->editNewPassword();
 
         }
-        
+
         // checking if the user read and agreed to the eula
         if (isset($_POST['eula'])){
 	        $this->updateEula();
         }
-        
+
         if (isset($_GET['sessionexpired'])){
 	        $this->messages[] = 'Session Expired!';
         }
-        
+
         if (isset($_GET['regcomplete'])){
 	        $this->messages[] = "Your account has been created successfully and we have sent you an email. Please click the VERIFICATION LINK within that mail!";
         }
-        
+
         if (isset($_GET['active'])){
 	        $this->messages[] = "Activation was successful! You may now log in!";
         }
-        
+
         if (isset($_GET['verify'])){
 	        $this->messages[] = "Please check your email and click on the reset link we sent you!";
         }
@@ -149,7 +149,7 @@ class Login
 
                 // If an error is catched, database connection failed
             } catch (PDOException $e) {
-                $this->errors[] = "Database connection problem.";
+                $this->errors[] = "Database connection problem." . $e->getMessage();
                 return false;
             }
         }
@@ -166,11 +166,13 @@ class Login
         if ($this->databaseConnection()) {
 
             // database query, getting all the info of the selected user
-            $query_user = $this->db_connection->prepare('SELECT * FROM users WHERE username = :username OR email = :username');
+            $query_user = $this->db_connection->prepare('SELECT * FROM users WHERE username = :username limit 1');
             $query_user->bindValue(':username', $username, PDO::PARAM_STR);
             $query_user->execute();
+            //print_r($query_user->fetch(PDO::FETCH_ASSOC));
             // get result row (as an object)
-            return $query_user->fetchObject();
+            //return $query_user->fetchObject();
+            return $query_user->fetch(PDO::FETCH_OBJ);
 
 		} else {
 
@@ -187,12 +189,13 @@ class Login
         $this->last = $_SESSION['last'];
         $this->accountType = $_SESSION['accountType'];
         $this->readEULA = $_SESSION['readEULA'];
-		$this->isAdmin = $_SESSION['isAdmin'];
+		    $this->isAdmin = $_SESSION['isAdmin'];
+        $this->isSuperUser = $_SESSION['isSuperUser'];
 
         // set logged in status to true, because we just checked for this:
         // !empty($_SESSION['username']) && ($_SESSION['isLoggedIn'] == 1)
         // when we called this method (in the constructor)
-        $this->isLoggedIn = true;        
+        $this->isLoggedIn = true;
     }
 
     private function loginWithCookieData()
@@ -224,6 +227,7 @@ class Login
                         $_SESSION['last'] = $result_row->last;
                         $_SESSION['accountType'] = $result_row->accountType;
                         $_SESSION['isAdmin'] = $result_row->isAdmin;
+                        $_SESSION['isSuperUser'] = $result_row->isSuperUser;
                         $_SESSION['readEULA'] = $result_row->readEULA;
                         $_SESSION['isLoggedIn'] = 1;
 
@@ -235,6 +239,7 @@ class Login
                         $this->last = $result_row->last;
                         $this->accountType = $result_row->accountType;
                         $this->isAdmin = $result_row->isAdmin;
+                        $this->isSuperUser = $result_row->isSuperUser;
                         $this->readEULA = $result_row->readEULA;
                         $this->isLoggedIn = true;
 
@@ -266,84 +271,91 @@ class Login
                 // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
                 if (password_verify($_POST['password'], $result_row->passwordHash)) {
 
-                    if ($result_row->userActive == 1) {
+                    if($result_row->accountDisabled == 0){
 
-                        // write user data into PHP SESSION [a file on your server]
-                        $_SESSION['id'] = $result_row->id;
-                        $_SESSION['username'] = $result_row->username;
-                        $_SESSION['email'] = $result_row->email;
-                        $_SESSION['first'] = $result_row->first;
-                        $_SESSION['last'] = $result_row->last;
-                        $_SESSION['accountType'] = $result_row->accountType;
-                        $_SESSION['isAdmin'] = $result_row->isAdmin;
-                        $_SESSION['readEULA'] = $result_row->readEULA;
-                        $_SESSION['isLoggedIn'] = 1;
+                      if ($result_row->userActive == 1) {
 
-                        // declare user id, set the login status to true
-                        $this->id = $result_row->id;
-                        $this->username = $result_row->username;
-                        $this->email = $result_row->email;
-                        $this->first = $result_row->first;
-                        $this->last = $result_row->last;
-                        $this->accountType = $result_row->accountType;
-                        $this->isAdmin = $result_row->isAdmin;
-                        $this->readEULA = $result_row->readEULA;
-                        $this->isLoggedIn = true;
+                          // write user data into PHP SESSION [a file on your server]
+                          $_SESSION['id'] = $result_row->id;
+                          $_SESSION['username'] = $result_row->username;
+                          $_SESSION['email'] = $result_row->email;
+                          $_SESSION['first'] = $result_row->first;
+                          $_SESSION['last'] = $result_row->last;
+                          $_SESSION['accountType'] = $result_row->accountType;
+                          $_SESSION['isAdmin'] = $result_row->isAdmin;
+                          $_SESSION['isSuperUser'] = $result_row->isSuperUser;
+                          $_SESSION['readEULA'] = $result_row->readEULA;
+                          $_SESSION['isLoggedIn'] = 1;
 
-                        // if user has check the "remember me" checkbox, then generate token and write cookie
-                        if (isset($_POST['rememberme'])) {
+                          // declare user id, set the login status to true
+                          $this->id = $result_row->id;
+                          $this->username = $result_row->username;
+                          $this->email = $result_row->email;
+                          $this->first = $result_row->first;
+                          $this->last = $result_row->last;
+                          $this->accountType = $result_row->accountType;
+                          $this->isAdmin = $result_row->isAdmin;
+                          $this->isSuperUser = $result_row->isSuperUser;
+                          $this->readEULA = $result_row->readEULA;
+                          $this->isLoggedIn = true;
 
-                            $this->newRememberMeCookie();
+                          // if user has check the "remember me" checkbox, then generate token and write cookie
+                          if (isset($_POST['rememberme'])) {
 
-                        } else {
+                              $this->newRememberMeCookie();
 
-                            // Reset rememberme token
-                            $this->deleteRememberMeCookie();
+                          } else {
 
-                        }
+                              // Reset rememberme token
+                              $this->deleteRememberMeCookie();
 
-                        // OPTIONAL: recalculate the user's password hash
-                        // DELETE this if-block if you like, it only exists to recalculate users's hashes when you provide a cost factor,
-                        // by default the script will use a cost factor of 10 and never change it.
-                        // check if the have defined a cost factor in config/hashing.php
-                        if (defined('HASH_COST_FACTOR')) {
+                          }
 
-                            // check if the hash needs to be rehashed
-                            if (password_needs_rehash($result_row->passwordHash, PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR))) {
+                          // OPTIONAL: recalculate the user's password hash
+                          // DELETE this if-block if you like, it only exists to recalculate users's hashes when you provide a cost factor,
+                          // by default the script will use a cost factor of 10 and never change it.
+                          // check if the have defined a cost factor in config/hashing.php
+                          if (defined('HASH_COST_FACTOR')) {
 
-                                // calculate new hash with new cost factor
-                                $this->passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
+                              // check if the hash needs to be rehashed
+                              if (password_needs_rehash($result_row->passwordHash, PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR))) {
 
-                                // TODO: this should be put into another method !?
-                                $query_update = $this->db_connection->prepare('UPDATE users SET passwordHash = :passwordHash WHERE id = :id');
-                                $query_update->bindValue(':passwordHash', $this->passwordHash, PDO::PARAM_STR);
-                                $query_update->bindValue(':id', $this->id, PDO::PARAM_INT);
-                                $query_update->execute();
+                                  // calculate new hash with new cost factor
+                                  $this->passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
 
-                                if ($query_update->rowCount() == 0) {
-                                    // writing new hash was successful. you should now output this to the user ;)
-                                } else {
-                                    // writing new hash was NOT successful. you should now output this to the user ;)
-                                }
+                                  // TODO: this should be put into another method !?
+                                  $query_update = $this->db_connection->prepare('UPDATE users SET passwordHash = :passwordHash WHERE id = :id');
+                                  $query_update->bindValue(':passwordHash', $this->passwordHash, PDO::PARAM_STR);
+                                  $query_update->bindValue(':id', $this->id, PDO::PARAM_INT);
+                                  $query_update->execute();
 
-                            }
+                                  if ($query_update->rowCount() == 0) {
+                                      // writing new hash was successful. you should now output this to the user ;)
+                                  } else {
+                                      // writing new hash was NOT successful. you should now output this to the user ;)
+                                  }
 
-                        }
+                              }
 
-                        // TO CLARIFY: in future versions of the script: should we rehash every hash with standard cost factor
-                        // when the HASH_COST_FACTOR in config/hashing.php is commented out ?                            
+                          }
+                          // TO CLARIFY: in future versions of the script: should we rehash every hash with standard cost factor
+                          // when the HASH_COST_FACTOR in config/hashing.php is commented out ?
 
-                    } else {
+                      } else {
+                          $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
+                      }
 
-                        $this->errors[] = "Your account is not activated yet. Please click on the confirm link in the mail.";
-
+                    }else{
+                      $this->errors[] = "Your account has been disabled. Please contact the system administrator.";
                     }
+
+
 
                 } else {
 
                     $this->errors[] = "Wrong password. Try again.";
 
-                }                
+                }
 
             } else {
 
@@ -362,7 +374,7 @@ class Login
     }
 
     /**
-     * Create all data needed for remember me cookie connection on client and server side 
+     * Create all data needed for remember me cookie connection on client and server side
      */
     private function newRememberMeCookie()
     {
@@ -384,7 +396,7 @@ class Login
     }
 
     /**
-     * Delete all data needed for remember me cookie connection on client and server side 
+     * Delete all data needed for remember me cookie connection on client and server side
      */
     private function deleteRememberMeCookie()
     {
@@ -423,7 +435,7 @@ class Login
     {
         return $this->isLoggedIn;
     }
-    
+
     /**
      * simply return the current admin status of the user
      * @return boolean users admin status
@@ -432,7 +444,7 @@ class Login
     {
 	    return $this->isAdmin;
     }
-    
+
     /**
      * edit the user's name, provided in the editing form
      */
@@ -502,7 +514,7 @@ class Login
             if ($this->databaseConnection()) {
 
                 // prevent database flooding
-                $this->email = substr(trim($_POST['email']), 0, 64); 
+                $this->email = substr(trim($_POST['email']), 0, 64);
                 // not really necessary, but just in case...
                 $this->id = intval($_SESSION['id']);
 
@@ -531,7 +543,7 @@ class Login
 
         }
 
-    }  
+    }
 
     /**
      * edit the user's password, provided in the editing form
@@ -540,15 +552,15 @@ class Login
     {
         if (empty($_POST['newPassword']) || empty($_POST['newPasswordRepeat']) || empty($_POST['oldPassword'])) {
 
-            $this->errors[] = "Empty Password";            
+            $this->errors[] = "Empty Password";
 
         } elseif ($_POST['newPassword'] !== $_POST['newPasswordRepeat']) {
 
-            $this->errors[] = "Password and password repeat are not the same";   
+            $this->errors[] = "Password and password repeat are not the same";
 
         } elseif (strlen($_POST['newPassword']) < 6) {
 
-            $this->errors[] = "Password has a minimum length of 6 characters";            
+            $this->errors[] = "Password has a minimum length of 6 characters";
 
         // all the above tests are ok
         } else {
@@ -570,7 +582,7 @@ class Login
                     // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
                     // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
                     // want the parameter: as an array with, currently only used with 'cost' => XX.
-                    $this->passwordHash = password_hash($_POST['newPassword'], PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));                        
+                    $this->passwordHash = password_hash($_POST['newPassword'], PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
 
                     // write users new hash into database
                     $query_update = $this->db_connection->prepare('UPDATE users SET passwordHash = :passwordHash WHERE id = :id');
@@ -598,15 +610,15 @@ class Login
             } else {
 
                 $this->errors[] = "This user does not exist.";
- 
+
             }
 
         }
 
-    }   
-    
+    }
+
     /**
-     * 
+     *
      */
     public function setPasswordResetDatabaseTokenAndSendMail()
     {
@@ -616,9 +628,9 @@ class Login
             $this->sendPasswordResetMail();
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public function setPasswordResetDatabaseToken()
     {
@@ -643,7 +655,7 @@ class Login
             // if this user exists
             if (isset($result_row->id)) {
 
-                // database query: 
+                // database query:
                 $query_update = $this->db_connection->prepare('UPDATE users SET passwordResetHash = :passwordResetHash,
                                                                passwordResetTimestamp = :passwordResetTimestamp
                                                                WHERE username = :username');
@@ -675,11 +687,11 @@ class Login
         }
 
         // return false (this method only returns true when the database entry has been set successfully)
-        return false;        
+        return false;
     }
-    
+
     /**
-     * 
+     *
      */
     public function sendPasswordResetMail()
     {
@@ -688,30 +700,30 @@ class Login
         // please look into the config/config.php for much more info on how to use this!
         // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
-            
+
             // Set mailer to use SMTP
             $mail->IsSMTP();
             //useful for debugging, shows full SMTP errors
             $mail->SMTPDebug = 0; // debugging: 1 = errors and messages, 2 = messages only
             // Enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
             // Enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
             }
             // Specify host server
-            $mail->Host = EMAIL_SMTP_HOST;  
-            $mail->username = EMAIL_SMTP_USERNAME;                            
-            $mail->Password = EMAIL_SMTP_PASSWORD;                      
-            $mail->Port = EMAIL_SMTP_PORT;       
-            
+            $mail->Host = EMAIL_SMTP_HOST;
+            $mail->username = EMAIL_SMTP_USERNAME;
+            $mail->Password = EMAIL_SMTP_PASSWORD;
+            $mail->Port = EMAIL_SMTP_PORT;
+
         } else {
 
-            $mail->IsMail();            
+            $mail->IsMail();
         }
 
         $mail->From = EMAIL_PASSWORDRESET_FROM;
-        $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;        
+        $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;
         $mail->AddAddress($this->email);
         $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
 
@@ -730,9 +742,9 @@ class Login
         }
 
     }
-    
+
     /**
-     * 
+     *
      */
     public function checkIfEmailVerificationCodeIsValid()
     {
@@ -744,6 +756,7 @@ class Login
 
             // database query, getting all the info of the selected user
             $result_row = $this->getUserData($this->username);
+            print "hash: " . ($result_row->passwordResetHash === $this->passwordResetHash);
 
             // if this user exists and have the same hash in database
             if (isset($result_row->id) && $result_row->passwordResetHash == $this->passwordResetHash) {
@@ -774,9 +787,9 @@ class Login
         }
 
     }
-    
+
     /**
-     * 
+     *
      */
     public function editNewPassword()
     {
@@ -812,7 +825,7 @@ class Login
                         $this->passwordHash = password_hash($this->user_password, PASSWORD_DEFAULT, array('cost' => $this->hash_cost_factor));
 
                         // write users new hash into database
-                        $query_update = $this->db_connection->prepare('UPDATE users SET passwordHash = :passwordHash, 
+                        $query_update = $this->db_connection->prepare('UPDATE users SET passwordHash = :passwordHash,
                                                                       passwordResetHash = NULL, passwordResetTimestamp = NULL
                                                                       WHERE username = :username AND passwordResetHash = :passwordResetHash');
                         $query_update->bindValue(':passwordHash', $this->passwordHash, PDO::PARAM_STR);
@@ -849,9 +862,9 @@ class Login
         }
 
     }
-    
+
     /**
-     * 
+     *
      * @return boolean
      */
     public function passwordResetLinkIsValid()
@@ -860,16 +873,16 @@ class Login
     }
 
     /**
-     * 
+     *
      * @return boolean
      */
     public function passwordResetWasSuccessful()
     {
         return $this->passwordResetSuccessful;
     }
-    
+
     /**
-     * 
+     *
      */
     public function getUsername()
     {
@@ -877,15 +890,15 @@ class Login
     }
 
     /**
-     * 
+     *
      */
     public function getPasswordResetHash()
     {
         return $this->passwordResetHash;
     }
-    
+
     public function updateEula(){
-	    
+
         // if database connection opened
         if ($this->databaseConnection()) {
 
@@ -896,9 +909,9 @@ class Login
             $_SESSION['readEULA'] = '1';
 
 		}
-	    
+
     }
-    
+
     public function getSideBarMessage(){
 	    $entryId=1;
 	    if ($this->databaseConnection()) {

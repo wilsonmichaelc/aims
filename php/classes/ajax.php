@@ -24,9 +24,9 @@ require_once("MetaData.php");
 
 require_once("FAQ.php");
 
-require_once("InvoiceBooking.php");
-require_once("InvoiceService.php");
-require_once("InvoiceTraining.php");
+//require_once("InvoiceBooking.php");
+//require_once("InvoiceService.php");
+//require_once("InvoiceTraining.php");
 
 require_once("ProjectInfo.php");
 require_once("ProjectUpdate.php");
@@ -50,9 +50,9 @@ $trainingInfo = new TrainingInfo();
 $trainingUpdate = new TrainingModuleUpdate();
 $meta = new MetaData();
 $faq = new FAQ();
-$invoiceBooking = new InvoiceBooking();
-$invoiceService = new InvoiceService();
-$invoiceTraining = new InvoiceTraining();
+//$invoiceBooking = new InvoiceBooking();
+//$invoiceService = new InvoiceService();
+//$invoiceTraining = new InvoiceTraining();
 $projectInfo = new ProjectInfo();
 $projectUpdate = new ProjectUpdate();
 $conferenceRoomInfo = new ConferenceRoomInfo();
@@ -115,6 +115,12 @@ if(isset($_POST['getServiceById']) && !empty($_POST['getServiceById'])){
 if( isset($_POST['updateUserAccountType']) ){
 	if($_SESSION['isAdmin'] == 1){
 		echo $users->updateUserAccountType($_POST['accountType'], $_POST['updateUserAccountType']);
+	}
+}
+
+if( isset($_POST['updateUserAccountStatus']) ){
+	if($_SESSION['isAdmin'] == 1){
+		echo $users->updateUserAccountStatus($_POST['updateUserAccountStatus'], $_POST['status']);
 	}
 }
 
@@ -214,11 +220,11 @@ if( isset($_POST['unArchiveBooking']) ){
 
 if( isset($_POST['updateService']) )
 {
-	$returnValue = '';
+	//$returnValue = '';
 	if($_SESSION['isAdmin'] == 1)
 	{
 		$result = $servicesOffered->ajaxUpdateAnalysisService(
-			$_POST['serviceId'], 
+			$_POST['serviceId'],
 			$_POST['memberRegular'],$_POST['memberDiscount'],$_POST['memberCutoff'],
     		$_POST['collaboratorRegular'],$_POST['collaboratorDiscount'],$_POST['collaboratorCutoff'],
     		$_POST['umbRegular'],$_POST['umbDiscount'],$_POST['umbCutoff'],
@@ -229,7 +235,7 @@ if( isset($_POST['updateService']) )
 		if($result && isset($_POST['prepId']))
 		{
 			$result = $servicesOffered->ajaxUpdatePrepService(
-				$_POST['serviceId'],
+				$_POST['prepId'],
 				$_POST['p_memberRegular'],$_POST['p_memberDiscount'],$_POST['p_memberCutoff'],
 	    		$_POST['p_collaboratorRegular'],$_POST['p_collaboratorDiscount'],$_POST['p_collaboratorCutoff'],
 	    		$_POST['p_umbRegular'],$_POST['p_umbDiscount'],$_POST['p_umbCutoff'],
@@ -237,18 +243,18 @@ if( isset($_POST['updateService']) )
 	    		$_POST['p_nonProfitRegular'],$_POST['p_nonProfitDiscount'],$_POST['p_nonProfitCutoff'],
 	    		$_POST['p_forProfitRegular'],$_POST['p_forProfitDiscount'],$_POST['p_forProfitCutoff']
 			);
-			$returnValue .= ' -- UpdatePrep: ' . $result;
+			//$returnValue .= ' -- UpdatePrep: ' . $result;
 		}
 		if($result){
 			$result = $servicesOffered->updateServiceName($_POST['serviceId'], $_POST['name']);
 		}
-		
+
 		if($result){
 			echo true;
 		}else{
 			echo false;
 		}
-    		
+
 	}
 
 }
@@ -266,9 +272,9 @@ if( isset($_POST['trainingEstimate']) ){
 }
 
 /*
-*	
+*
 *	Ajax Requests for loading booking data by date range
-*	
+*
 */
 if( isset($_POST['booking']) ){
 	if($_SESSION['isAdmin'] == 1){
@@ -288,9 +294,9 @@ if( isset($_POST['booking_metadata']) ){
 }
 
 /*
-*	
+*
 *	Ajax Requests for loading fee-for-service data by date range
-*	
+*
 */
 if( isset($_POST['serviceRequests']) ){
 	if($_SESSION['isAdmin'] == 1){
@@ -321,9 +327,9 @@ if( isset($_POST['serviceName_metadata']) ){
 }
 
 /*
-*	
+*
 *	Ajax Requests for loading training data by date range
-*	
+*
 */
 if( isset($_POST['trainingRequests']) ){
 	if($_SESSION['isAdmin'] == 1){
@@ -342,9 +348,9 @@ if( isset($_POST['training_metadata']) ){
 }
 
 /*
-*	
+*
 *	Ajax Request to cancel booking. Booking will only be canceled with 24hr lead time.
-*	
+*
 */
 if( isset($_POST['cancelBooking']) ){
 	echo $modifyBooking->cancelBooking($_POST['bookingId']);
@@ -358,11 +364,13 @@ if(isset($_POST['getBase64Logo'])){
 	echo $meta->getLogo($_POST['getBase64Logo']);
 }
 
+/*
 if( isset($_POST['getBookingInvoice']) ){
 	if($_SESSION['isAdmin'] == 1){
 		echo $invoiceBooking->getInvoice($_POST['getBookingInvoice']);
 	}
 }
+
 
 if( isset($_POST['getServiceInvoice']) ){
 	if($_SESSION['isAdmin'] == 1){
@@ -375,6 +383,7 @@ if( isset($_POST['getTrainingInvoice']) ){
 		echo $invoiceTraining->getInvoice($_POST['getTrainingInvoice']);
 	}
 }
+*/
 
 if( isset($_POST['getUserBookings']) ){
 	if($_SESSION['isAdmin'] == 1){
@@ -439,6 +448,5 @@ if( isset($_POST['deleteFaq']) ){
 		echo $faq->deleteFaq($_POST['id']);
 	}
 }
-
 
 ?>

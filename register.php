@@ -111,7 +111,7 @@ if (!$registration->registration_successful && !$registration->verification_succ
 										<!-- generate and display a captcha and write the captcha string into session -->
 									    <div class="label captcha">Robot Filter</div>
 									    <div class="input captcha">
-									   		<img src="php/tools/showCaptcha.php" /><br/>
+									   		<img src="./php/tools/showCaptcha.php" /><br/>
 									   		<input type="text" name="captcha" required /><br/><br/>
 									    </div>
 									    
@@ -169,7 +169,7 @@ if (!$registration->registration_successful && !$registration->verification_succ
 				<div id="copyright">
 					<p>
 						&copy; 2014 Mass Spectrometry Center.<br />
-						Maintainer: <a href="mailto:mwilson@rx.umaryland.edu">Michael Wilson</a>
+						Maintainer: <a href="mailto:<?php echo MAINTAINER_EMAIL; ?>"><?php echo MAINTAINER_NAME; ?></a>
 						Aesthetics: <a href="http://html5up.net/">HTML5 UP</a>
 					</p>
 				</div>
