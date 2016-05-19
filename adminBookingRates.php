@@ -104,7 +104,7 @@ if ($_SESSION['isAdmin'] == 0){
 										8 Hours: <input style="width: 50px;" type="text" name="eightHours" value="<?php echo $r['eightHours']; ?>" required/>
 										16 Hours: <input style="width: 50px;" type="text" name="sixteenHours" value="<?php echo $r['sixteenHours']; ?>" required/>
 										24 Hours: <input style="width: 50px;" type="text" name="twentyFourHours" value="<?php echo $r['twentyFourHours']; ?>" required/>
-										<input type="hidden" name="id" value="<?php echo $r['id']; ?>" />
+										<input type="hidden" name="accountTypeId" value="<?php echo $r['accountTypeId']; ?>" />
 										<input style="width: 100px;" type="submit" name="updateInternalRates" value="Update" />
 									</form>
 								
@@ -119,7 +119,7 @@ if ($_SESSION['isAdmin'] == 0){
 										Staff Rate: <input style="width: 50px;" type="text" name="staffRate" value="<?php echo $r['staffRate']; ?>" required/>
 										High Accuracy: <input style="width: 50px;" type="text" name="highAccuracyRate" value="<?php echo $r['highAccuracyRate']; ?>" required/>
 										Low Accuracy: <input style="width: 50px;" type="text" name="lowAccuracyRate" value="<?php echo $r['lowAccuracyRate']; ?>" required/>
-										<input type="hidden" name="id" value="<?php echo $r['id']; ?>" />
+										<input type="hidden" name="accountTypeId" value="<?php echo $r['accountTypeId']; ?>" />
 										<input style="width: 100px;" type="submit" name="updateExternalRates" value="Update" />
 									</form>
 								
