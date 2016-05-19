@@ -66,7 +66,7 @@ class BookingRates
 	    
     }
     
-    public function updateInternalRates($staffRate, $oneHour, $fourHours, $eightHours, $sixteenHours, $twentyFourHours, $accountTypeId){
+    public function updateInternalRates($accountTypeId, $staffRate, $oneHour, $fourHours, $eightHours, $sixteenHours, $twentyFourHours){
 	    
 	    if ($this->databaseConnection()) {
 		    
@@ -91,7 +91,7 @@ class BookingRates
 	    
     }
     
-    public function updateExternalRates($staffRate, $highAccuracyRate, $lowAccuracyRate, $accountTypeId){
+    public function updateExternalRates($accountTypeId, $staffRate, $highAccuracyRate, $lowAccuracyRate){
 	    
 	    if ($this->databaseConnection()) {
 		    
