@@ -3,6 +3,8 @@ aims
 
 #### Analytical Instrument Management System
 
+###### Try it here: wilsoninformatics.com/ims
+
 ###### Step 1
 
 LAMP Stack
@@ -20,6 +22,12 @@ Import the SQL file located in the SQL directory. It will perform the following.
 
 Copy the aims directory (or the contents) to wherever you are hosting your content. Usually in /var/www on linux systems.
 You probably want to omit the "sql" directory from this copy operation.
+
+###### Step 4
+
+Update php/config.php file to match your server configuration. 
+- DOMAIN/EMAIL/COOKEY_SECRET_KEY/HASH_COST_FACTOR/SMTP/
+- Email Alerts Example with multiple emails: define('EMAIL_FFS_ALERTS', (array ('email1@abc.com', 'email2@abc.com')))
 
 ###### Notes
 I created this project for the University of Maryland, Baltimore Mass Spectrometry Center. It's purpose is to allow tracking and management of the cost center samples and pricing. It has also been modified to generate invoices, but this feature still needs some work.
