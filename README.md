@@ -3,6 +3,8 @@ aims
 
 #### Analytical Instrument Management System
 
+###### Try it here: wilsoninformatics.com/ims
+
 ###### Step 1
 
 LAMP Stack
