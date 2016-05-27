@@ -3,13 +3,13 @@
 /**
  * class Registration
  * handles the user registration
- * 
+ *
  * @author Panique <panique@web.de>
  * @version 1.1
  */
 class Registration
 {
-    private $db_connection            = null;    // database connection   
+    private $db_connection            = null;    // database connection
 
     public  $registration_successful  = false;
     public  $verification_successful  = false;
@@ -20,23 +20,18 @@ class Registration
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
      * you know, when you do "$login = new Login();"
-     */    
+     */
     public function __construct()
     {
-        session_start();
-
-        // if we have such a POST request, call the registerNewUser() method
-        if (isset($_POST["register"])) {
-
-			$this->registerNewUser($_POST['username'], $_POST['email'], $_POST['institution'], $_POST['newPassword'], $_POST['newPasswordRepeat'], $_POST["captcha"], $_POST['first'], $_POST['last'], $_POST['accountType']);
-
-        }
-        // if we have such a GET request, call the verifyNewUser() method
-        if (isset($_GET["id"]) && isset($_GET["verificationCode"])) {
-
-            $this->verifyNewUser($_GET["id"], $_GET["verificationCode"]);
-
-        }
+      session_start();
+      // if we have such a POST request, call the registerNewUser() method
+      if (isset($_POST["register"])) {
+          $this->registerNewUser($_POST['username'], $_POST['email'], $_POST['institution'], $_POST['newPassword'], $_POST['newPasswordRepeat'], $_POST["captcha"], $_POST['first'], $_POST['last'], $_POST['accountType']);
+      }
+      // if we have such a GET request, call the verifyNewUser() method
+      if (isset($_GET["id"]) && isset($_GET["verificationCode"])) {
+          $this->verifyNewUser($_GET["id"], $_GET["verificationCode"]);
+      }
     }
 
     /**
@@ -52,7 +47,6 @@ class Registration
             try {
                 $this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME, DB_USER, DB_PASS);
                 return true;
-
             // If an error is catched, database connection failed
             } catch (PDOException $e) {
                 $this->errors[] = "Database connection problem.";
@@ -63,7 +57,7 @@ class Registration
 
     /**
      * registerNewUser()
-     * 
+     *
      * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
      * everything is fine
      */
@@ -83,12 +77,12 @@ class Registration
             $this->errors[] = "Empty Username";
 
         } elseif (empty($institution)) {
-        	
+
         	$this->errors[] = "Institution must be provided!";
-	        
+
         } elseif (empty($newPassword) || empty($newPasswordRepeat)) {
 
-            $this->errors[] = "Empty Password";            
+            $this->errors[] = "Empty Password";
 
         } elseif ($newPassword !== $newPasswordRepeat) {
 
@@ -123,17 +117,17 @@ class Registration
 
         // finally if all the above checks are ok
         } elseif (empty($first)){
-        
+
         	$this->errors[] = "First Name cannot be empty";
-        
+
         } elseif (empty($last)){
-        
+
         	$this->errors[] = "Last Name cannot be empty";
-        
+
         } elseif (empty($accountType)){
-        
+
         	$this->errors[] = "Account type cannot be empty";
-        
+
         } else {
 
             // if database connection opened
@@ -153,21 +147,17 @@ class Registration
                 $query_check_username = $this->db_connection->prepare('SELECT username FROM users WHERE username=:username');
                 $query_check_username->bindValue(':username', $username, PDO::PARAM_STR);
                 $query_check_username->execute();
-                
+
                 $query_check_email = $this->db_connection->prepare('SELECT email FROM users WHERE email=:email');
                 $query_check_email->bindValue(':email', $email, PDO::PARAM_STR);
                 $query_check_email->execute();
 
                 if ($query_check_username->fetchColumn() != false) {
-
                     $this->errors[] = "Sorry, that username is already taken. Please choose another one.";
                     $_POST['username'] = '';
-
                 } else if($query_check_email->fetchColumn() != false){
-                
-	                $this->errors[] = "Sorry, that email has already been used. If you need to recover your password click <a href='passwordReset.php'>HERE</a>";
+                    $this->errors[] = "Sorry, that email has already been used. If you need to recover your password click <a href='passwordReset.php'>HERE</a>";
                     $_POST['email'] = '';
-                    
                 } else {
 
                     // generate random hash for email verification (40 char string)
@@ -190,29 +180,20 @@ class Registration
                     $id = $this->db_connection->lastInsertId();
 
                     if ($query_new_user_insert) {
-
                         // send a verification email
                         if ($this->sendVerificationEmail($id, $email, $activationHash)) {
-
                             // when mail has been send successfully
                             //$this->messages[] = "Your account has been created successfully and we have sent you an email. Please click the VERIFICATION LINK within that mail";
                             $this->registration_successful = true;
-
                         } else {
-
                             // delete this users account immediately, as we could not send a verification email
                             $query_delete_user = $this->db_connection->prepare('DELETE FROM users WHERE id=:id');
                             $query_delete_user->bindValue(':id', $id, PDO::PARAM_INT);
                             $query_delete_user->execute();
-
                             $this->errors[] = "Sorry, we could not send you an verification mail. Your account has NOT been created.";
-
                         }
-
                     } else {
-
                         $this->errors[] = "Sorry, your registration failed. Please go back and try again.";
-
                     }
                 }
             }
@@ -237,24 +218,24 @@ class Registration
             //useful for debugging, shows full SMTP errors
             $mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
             // Enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;                               
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
             // Enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {                
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;                              
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
             }
             // Specify host server
-            $mail->Host = EMAIL_SMTP_HOST;  
-            $mail->Username = EMAIL_SMTP_USERNAME;                            
-            $mail->Password = EMAIL_SMTP_PASSWORD;                      
-            $mail->Port = EMAIL_SMTP_PORT;       
+            $mail->Host = EMAIL_SMTP_HOST;
+            $mail->Username = EMAIL_SMTP_USERNAME;
+            $mail->Password = EMAIL_SMTP_PASSWORD;
+            $mail->Port = EMAIL_SMTP_PORT;
 
         } else {
 
-            $mail->IsMail();            
+            $mail->IsMail();
         }
 
         $mail->From = EMAIL_VERIFICATION_FROM;
-        $mail->FromName = EMAIL_VERIFICATION_FROM_NAME;        
+        $mail->FromName = EMAIL_VERIFICATION_FROM_NAME;
         $mail->AddAddress($email);
         $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
 
@@ -285,7 +266,6 @@ class Registration
     {
         // if database connection opened
         if ($this->databaseConnection()) {
-
             // try to update user with specified information
             $query_update_user = $this->db_connection->prepare('UPDATE users SET userActive = 1, activationHash = NULL WHERE id = :id AND activationHash = :activationHash');
             $query_update_user->bindValue(':id', intval(trim($id)), PDO::PARAM_INT);
@@ -293,36 +273,28 @@ class Registration
             $query_update_user->execute();
 
             if ($query_update_user->rowCount() > 0) {
-
-                //$this->verification_successful = true;
                 //$this->messages[] = "Activation was successful! You may now log in!";
                 header('Location: login.php?active');
-                
-
             } elseif($query_update_user->errorCode() > 0) {
-
                 $this->errors[] = "Sorry, MySQL is reporting an error. Check your configuration.";
-
             } else {
-
                 $this->errors[] = "Sorry, no such id/verification code combination here...";
-
             }
 
         }
 
     }
-    
-    public function getSideBarMessage(){
-	    $entryId=1;
-	    if ($this->databaseConnection()) {
 
+    public function getSideBarMessage(){
+        $entryId=1;
+        if ($this->databaseConnection()) {
             // database query, getting all the info of the selected user
             $query = $this->db_connection->prepare('SELECT html FROM sideBarMessage WHERE id=:id');
             $query->bindValue(':id', $entryId, PDO::PARAM_INT);
             $query->execute();
-			return $query->fetchColumn();
-		}
+            return $query->fetchColumn();
+        }
     }
 
 }
+?>
