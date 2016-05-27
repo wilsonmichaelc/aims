@@ -42,26 +42,26 @@ if ($login->isUserLoggedIn() == true) {
 
 			<!-- Content -->
 			<div id="content">
-			
+
 				<!-- Inner Content -->
 				<div id="content-inner">
-			
+
 						<!-- Post -->
 						<article class="is-post is-post-excerpt">
 
 							<!-- Inner Menu -->
 							<div class="info">
 								<span class="date">
-									<span class="fa fa-terminal"></span> 
+									<span class="fa fa-terminal"></span>
 								</span>
 							</div>
 							<!-- /Inner Menu -->
-							
+
 							<header>
 								<h2><a href="#">Login</a></h2>
 								<!-- <span class="byline">Mass Spectrometry Center Instrument Management System</span> -->
 								<span class="byline">
-									<?php 
+									<?php
 										if ($login->errors) { foreach ($login->errors as $error) { echo '<div class="errors">' . $error . '</div>'; } }
 										if ($login->messages) { foreach ($login->messages as $message) { echo '<div class="success">' . $message . '</div>'; } }
 									?>
@@ -73,34 +73,40 @@ if ($login->isUserLoggedIn() == true) {
 								<div class="column-container">
 									<form action="login.php" method="post" name="loginform" accept-charset="UTF-8" autocomplete="off">
 										<input type="text" name="username" placeholder="Username" required/><br />
-										<input type="password" name="password" placeholder="Password" required/><br />	
-										<input type="submit" name="login" value="Login"/>		
+										<input type="password" name="password" placeholder="Password" required/><br />
+										<input type="submit" name="login" value="Login"/>
 									</form>
 								</div>
-								
+
+                <div class="column-container">
+                  <p>
+                    Try it out with: demo/Demo!123
+                  </p>
+                </div>
+
 								<div class="column-container">
 									<p>Forget your password? Click <a href="passwordReset.php">here</a> to reset it.</p>
 								</div>
 							</div>
-							
+
 						</article>
 						<!-- End Post -->
 
 				</div>
 				<!-- /Inner Content -->
-				
+
 			</div>
 			<!-- /Content -->
-				
+
 			<!-- Sidebar -->
 			<div id="sidebar">
-			
+
 				<!-- Logo -->
 				<div id="logo">
 					<h1>AIMS</h1>
 				</div>
 				<!-- /Logo -->
-		
+
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
@@ -113,7 +119,7 @@ if ($login->isUserLoggedIn() == true) {
 				<!-- Search -->
 					<?php include("php/includes/search.php"); ?>
 				<!-- /Search -->
-		
+
 				<!-- Text -->
 				<section class="is-text-style1">
 					<div class="inner">
@@ -138,7 +144,7 @@ if ($login->isUserLoggedIn() == true) {
 
 		</div>
 		<!-- /Wrapper -->
-		
+
 		<!-- Scripts -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/skel.min.js"></script>
