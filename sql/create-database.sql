@@ -23,6 +23,13 @@
 CREATE DATABASE IF NOT EXISTS _ims;
 
 
+# Create the databse and user to access db
+# ------------------------------------------------------------
+CREATE USER 'ims'@'localhost' IDENTIFIED BY 'password';
+GRANT CREATE,DELETE,INSERT,SELECT,UPDATE ON _ims.* TO 'ims'@'localhost';
+FLUSH PRIVILEGES;
+USE _ims;
+
 
 # Dump of table accountTypes
 # ------------------------------------------------------------
