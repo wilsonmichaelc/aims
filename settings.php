@@ -48,17 +48,17 @@ if ($login->isUserLoggedIn() == false) {
 
 			<!-- Content -->
 			<div id="content">
-			
+
 				<!-- Inner Content -->
 				<div id="content-inner">
-			
+
 						<!-- Post -->
 						<article class="is-post is-post-excerpt">
 
 							<header>
 								<h2><a href="#">Settings</a></h2>
 								<span id="messages" class="byline">
-									<?php 
+									<?php
 										// show negative messages
 										if ($login->errors) { foreach ($login->errors as $error) { echo '<div class="error">' . $error . '</div>'; } }
 										// show positive messages
@@ -66,31 +66,32 @@ if ($login->isUserLoggedIn() == false) {
 									?>
 								</span>
 							</header>
-							
+
 							<div class="info">
 								<span class="date">
-									<span class="fa fa-cogs"></span> 
+									<span class="fa fa-cogs"></span>
 								</span>
 							</div>
 
 							<!-- Page Content -->
 							<section class="is-form">
 								<div class="page-content-min-height column-container" style="overflow: visible;">
-								
+
+                <?php if($thisUser['username'] != "demo"): ?>
 									<span class="byline">Change Password</span>
 									<form method="post" action="settings.php">
 									    <div style="width: 200px;">Old Password</div>
 									    <input type="password" name="oldPassword" required autocomplete="off" style="width: 250px;"/>
 									    <br>
 									    <div>New password (min. 6 characters)</div>
-									    <input type="password" name="newPassword" pattern=".{6,}" required autocomplete="off" style="width: 250px;"/>  
+									    <input type="password" name="newPassword" pattern=".{6,}" required autocomplete="off" style="width: 250px;"/>
 									    <br>
 									    <div>Repeat new password</div>
 									    <input type="password" name="newPasswordRepeat" pattern=".{6,}" required autocomplete="off" style="width: 250px;"/>
 									    <br>
 									    <input type="submit"  name="editPassword" value="Change Password" style="width: 250px;"/>
 									</form>
-									
+
 									<span class="byline">User Details</span>
 									<form method="post" action="javascript:void(0)" class="updateUser">
 									    <div style="width: 200px;">Name</div>
@@ -98,7 +99,7 @@ if ($login->isUserLoggedIn() == false) {
 									    <input type="text" name="last" value="<?php echo $thisUser['last']; ?>" required style="width: 150px;"/>
 									    <br>
 									    <div style="width: 200px;">Email</div>
-									    <input type="text" name="email" value="<?php echo $thisUser['email']; ?>" required style="width: 300px;"/>  
+									    <input type="text" name="email" value="<?php echo $thisUser['email']; ?>" required style="width: 300px;"/>
 									    <br>
 									    <div style="width: 200px;">Institution</div>
 									    <input type="text" name="institution" value="<?php echo $thisUser['institution']; ?>" required style="width: 300px;"/>
@@ -106,28 +107,30 @@ if ($login->isUserLoggedIn() == false) {
 									    <br>
 									    <input type="submit"  name="updateUser" value="Update" style="width: 300px;"/>
 									</form>
-											
+                <?php else: ?>
+                  <span class="byline">Sorry, you cannot edit the demo account settings...</span>
+                <?php endif; ?>
 								</div>
 							</section>
-							
+
 						</article>
 						<!-- End Post -->
 
 				</div>
 				<!-- /Inner Content -->
-				
+
 			</div>
 			<!-- /Content -->
-				
+
 			<!-- Sidebar -->
 			<div id="sidebar">
-			
+
 				<!-- Logo -->
 				<div id="logo">
 					<h1>AIMS</h1>
 				</div>
 				<!-- /Logo -->
-		
+
 				<!-- Logout -->
 				<section>
 					<div class="inner">
@@ -136,7 +139,7 @@ if ($login->isUserLoggedIn() == false) {
 					</div>
 				</section>
 				<!-- /Logout -->
-				
+
 				<!-- Nav -->
 				<nav id="nav">
 					<ul>
@@ -155,7 +158,7 @@ if ($login->isUserLoggedIn() == false) {
 				<!-- Search -->
 					<?php include("php/includes/search.php"); ?>
 				<!-- /Search -->
-		
+
 				<!-- Text -->
 				<section class="is-text-style1">
 					<div class="inner">
@@ -186,6 +189,6 @@ if ($login->isUserLoggedIn() == false) {
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
 		<script src="js/settings.js"></script>
-		
+
 	</body>
 </html>
